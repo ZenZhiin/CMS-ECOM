@@ -12,7 +12,8 @@ import {
   Settings,
   LogOut,
   Menu,
-  X
+  X,
+  Key
 } from 'lucide-react';
 import styles from './layout.module.css';
 
@@ -43,6 +44,8 @@ export default function DashboardLayout({
     { icon: ImageIcon, label: 'Media Library', href: '/dashboard/media' },
     { icon: Users, label: 'Team', href: '/dashboard/team' },
     { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
+    { icon: Database, label: 'Navigation', href: '/dashboard/settings/navigation' },
+    { icon: Key, label: 'API Keys', href: '/dashboard/settings/api-keys' },
   ];
 
   return (
