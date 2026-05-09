@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Users, Shield, Trash2, Mail, Calendar, Plus, Edit, X, Save } from 'lucide-react';
+import { Users, Shield, Trash2, Mail, Calendar, Plus, Edit, X, Save, User as UserIcon } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
+import { Select } from '@/components/atoms/Select';
 import { apiFetch } from '@/lib/api';
 import styles from './page.module.css';
 
@@ -14,6 +15,7 @@ export default function TeamPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editingUser, setEditingUser] = useState<any>(null);
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: '',
     role: 'EDITOR'
@@ -37,10 +39,10 @@ export default function TeamPage() {
   const handleOpenModal = (user: any = null) => {
     if (user) {
       setEditingUser(user);
-      setFormData({ email: user.email, password: '', role: user.role });
+      setFormData({ name: user.name || '', email: user.email, password: '', role: user.role });
     } else {
       setEditingUser(null);
-      setFormData({ email: '', password: '', role: 'EDITOR' });
+      setFormData({ name: '', email: '', password: '', role: 'EDITOR' });
     }
     setIsModalOpen(true);
   };
@@ -55,7 +57,7 @@ export default function TeamPage() {
     setIsSubmitting(true);
     try {
       if (editingUser) {
-        const payload: any = { email: formData.email, role: formData.role };
+        const payload: any = { name: formData.name, email: formData.email, role: formData.role };
         if (formData.password) payload.password = formData.password;
         
         await apiFetch(`/users/${editingUser.id}`, {
@@ -99,6 +101,12 @@ export default function TeamPage() {
     }
   };
 
+  const roleOptions = [
+    { label: 'Administrator', value: 'ADMIN' },
+    { label: 'Editor', value: 'EDITOR' },
+    { label: 'Viewer', value: 'VIEWER' }
+  ];
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -132,24 +140,21 @@ export default function TeamPage() {
                     <td>
                       <div className={styles.userInfo}>
                         <div className={styles.avatar}>
-                          {user.email[0].toUpperCase()}
+                          {user.name ? user.name[0].toUpperCase() : user.email[0].toUpperCase()}
                         </div>
                         <div className={styles.userDetails}>
+                          <span className={styles.name}>{user.name || 'Anonymous User'}</span>
                           <span className={styles.email}>{user.email}</span>
-                          <span className={styles.id}>ID: {user.id.substring(0, 8)}...</span>
                         </div>
                       </div>
                     </td>
                     <td>
-                      <select 
-                        className={`${styles.roleSelect} ${styles[user.role.toLowerCase()]}`}
+                       <Select 
+                        options={roleOptions}
                         value={user.role}
                         onChange={(e) => handleRoleChange(user.id, e.target.value)}
-                      >
-                        <option value="ADMIN">Administrator</option>
-                        <option value="EDITOR">Editor</option>
-                        <option value="VIEWER">Viewer</option>
-                      </select>
+                        className={styles.tableSelect}
+                      />
                     </td>
                     <td>
                       <div className={styles.date}>
@@ -188,7 +193,16 @@ export default function TeamPage() {
             </header>
             <form onSubmit={handleSubmit} className={styles.modalForm}>
               <Input 
+                label="Full Name" 
+                placeholder="e.g. John Doe"
+                value={formData.name}
+                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                required
+              />
+              <Input 
                 label="Email Address" 
+                type="email"
+                placeholder="john@example.com"
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
                 required
@@ -196,22 +210,17 @@ export default function TeamPage() {
               <Input 
                 label={editingUser ? "Change Password (optional)" : "Password"}
                 type="password"
+                placeholder="••••••••"
                 value={formData.password}
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
                 required={!editingUser}
               />
-              <div className={styles.field}>
-                <label className={styles.label}>System Role</label>
-                <select 
-                  className={styles.select}
-                  value={formData.role}
-                  onChange={(e) => setFormData({...formData, role: e.target.value})}
-                >
-                  <option value="ADMIN">Administrator</option>
-                  <option value="EDITOR">Editor</option>
-                  <option value="VIEWER">Viewer</option>
-                </select>
-              </div>
+              <Select 
+                label="System Role"
+                options={roleOptions}
+                value={formData.role}
+                onChange={(e) => setFormData({...formData, role: e.target.value})}
+              />
               <div className={styles.modalActions}>
                 <Button variant="ghost" onClick={handleCloseModal} type="button">Cancel</Button>
                 <Button type="submit" isLoading={isSubmitting}>
