@@ -1,4 +1,4 @@
-import { LoginForm } from '@/components/organisms/LoginForm';
+import { LoginForm } from '@/features/auth/components/LoginForm';
 import styles from './page.module.css';
 
 export default function Home() {

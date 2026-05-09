@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { authService } from '@/services/auth.service';
-import { Button } from '../atoms/Button';
-import { Input } from '../atoms/Input';
+import { authService } from '@/features/auth/services/auth.service';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
 import styles from './LoginForm.module.css';
 
 export const LoginForm: React.FC = () => {
