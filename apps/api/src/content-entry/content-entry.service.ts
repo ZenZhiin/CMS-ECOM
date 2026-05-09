@@ -6,7 +6,7 @@ import { CreateContentEntryDto } from './dto/create-content-entry.dto';
 export class ContentEntryService {
   constructor(private prisma: PrismaService) {}
 
-  async create(dto: CreateContentEntryDto) {
+  async create(dto: CreateContentEntryDto, authorId: string) {
     const contentType = await this.prisma.contentType.findUnique({
       where: { id: dto.contentTypeId },
     });
@@ -20,6 +20,7 @@ export class ContentEntryService {
     return this.prisma.contentEntry.create({
       data: {
         contentTypeId: dto.contentTypeId,
+        authorId: authorId,
         data: dto.data,
       },
     });

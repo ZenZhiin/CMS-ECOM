@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Query, Req } from '@nestjs/common';
 import { ContentEntryService } from './content-entry.service';
 import { CreateContentEntryDto } from './dto/create-content-entry.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -12,8 +12,8 @@ export class ContentEntryController {
   constructor(private readonly contentEntryService: ContentEntryService) {}
 
   @Post()
-  create(@Body() createContentEntryDto: CreateContentEntryDto) {
-    return this.contentEntryService.create(createContentEntryDto);
+  create(@Body() createContentEntryDto: CreateContentEntryDto, @Req() req: any) {
+    return this.contentEntryService.create(createContentEntryDto, req.user.id);
   }
 
   @Get()
