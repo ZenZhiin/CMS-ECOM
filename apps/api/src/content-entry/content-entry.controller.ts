@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards, Query, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Query, Req, Patch } from '@nestjs/common';
 import { ContentEntryService } from './content-entry.service';
 import { CreateContentEntryDto } from './dto/create-content-entry.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -28,6 +28,11 @@ export class ContentEntryController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.contentEntryService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() dto: any) {
+    return this.contentEntryService.update(id, dto);
   }
 
   @Delete(':id')

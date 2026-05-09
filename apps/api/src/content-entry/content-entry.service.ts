@@ -46,6 +46,19 @@ export class ContentEntryService {
     return entry;
   }
 
+  async update(id: string, dto: any) {
+    const entry = await this.findOne(id);
+    
+    if (dto.data) {
+      this.validateData(dto.data, entry.contentType.fields as any);
+    }
+
+    return this.prisma.contentEntry.update({
+      where: { id },
+      data: dto,
+    });
+  }
+
   async delete(id: string) {
     await this.findOne(id);
     return this.prisma.contentEntry.delete({
