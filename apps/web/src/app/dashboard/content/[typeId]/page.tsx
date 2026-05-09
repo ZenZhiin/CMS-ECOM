@@ -84,6 +84,7 @@ export default function EntryListPage({ params }: { params: Promise<{ typeId: st
               {contentType.fields.slice(0, 3).map((f: any) => (
                 <th key={f.name}>{f.name}</th>
               ))}
+              <th>Status</th>
               <th>Created At</th>
               <th className={styles.actionsHeader}>Actions</th>
             </tr>
@@ -91,7 +92,7 @@ export default function EntryListPage({ params }: { params: Promise<{ typeId: st
           <tbody>
             {entries.length === 0 ? (
               <tr>
-                <td colSpan={contentType.fields.length + 2} className={styles.emptyRow}>
+                <td colSpan={contentType.fields.length + 3} className={styles.emptyRow}>
                   No entries found. Create your first one!
                 </td>
               </tr>
@@ -101,6 +102,11 @@ export default function EntryListPage({ params }: { params: Promise<{ typeId: st
                   {contentType.fields.slice(0, 3).map((f: any) => (
                     <td key={f.name}>{entry.data[f.name]?.toString() || '-'}</td>
                   ))}
+                  <td>
+                    <span className={`${styles.badge} ${styles[entry.status.toLowerCase()]}`}>
+                      {entry.status}
+                    </span>
+                  </td>
                   <td>{new Date(entry.createdAt).toLocaleDateString()}</td>
                   <td className={styles.actionsCell}>
                     <button className={styles.iconBtn}><Edit size={16} /></button>
