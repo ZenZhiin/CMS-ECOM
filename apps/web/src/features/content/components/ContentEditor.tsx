@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Save } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
+import { Select } from '@/components/atoms/Select';
 import { apiFetch } from '@/lib/api';
 import Link from 'next/link';
 import styles from './ContentEditor.module.css';
@@ -150,14 +151,16 @@ export const ContentEditor: React.FC<ContentEditorProps> = ({ typeId, entryId })
             <div className={styles.sideCard}>
               <h3>Publication</h3>
               <div className={styles.sideContent}>
-                <div className={styles.statusSelect}>
-                  <label>Status</label>
-                  <select value={status} onChange={(e) => setStatus(e.target.value)}>
-                    <option value="DRAFT">Draft</option>
-                    <option value="PUBLISHED">Published</option>
-                    <option value="ARCHIVED">Archived</option>
-                  </select>
-                </div>
+                <Select 
+                  label="Status"
+                  options={[
+                    { label: 'Draft', value: 'DRAFT' },
+                    { label: 'Published', value: 'PUBLISHED' },
+                    { label: 'Archived', value: 'ARCHIVED' }
+                  ]}
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                />
                 <Button type="submit" fullWidth isLoading={isSaving}>
                   <Save size={18} />
                   {entryId ? 'Update Entry' : 'Publish Entry'}

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, Plus, Trash2, Save } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
+import { Select } from '@/components/atoms/Select';
 import { apiFetch } from '@/lib/api';
 import styles from './page.module.css';
 import Link from 'next/link';
@@ -96,29 +97,25 @@ export default function NewContentTypePage() {
             {fields.map((field, index) => (
               <div key={index} className={styles.fieldItem}>
                 <div className={styles.fieldInputs}>
-                  <div className={styles.inputWrap}>
-                    <label>Field Name</label>
-                    <input 
-                      type="text" 
-                      value={field.name}
-                      placeholder="e.g. description"
-                      onChange={(e) => updateField(index, 'name', e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className={styles.inputWrap}>
-                    <label>Type</label>
-                    <select 
-                      value={field.type}
-                      onChange={(e) => updateField(index, 'type', e.target.value)}
-                    >
-                      <option value="text">Text</option>
-                      <option value="number">Number</option>
-                      <option value="boolean">Boolean</option>
-                      <option value="date">Date</option>
-                      <option value="image">Image</option>
-                    </select>
-                  </div>
+                  <Input 
+                    label="Field Name"
+                    value={field.name}
+                    placeholder="e.g. description"
+                    onChange={(e) => updateField(index, 'name', e.target.value)}
+                    required
+                  />
+                  <Select 
+                    label="Type"
+                    options={[
+                      { label: 'Text', value: 'text' },
+                      { label: 'Number', value: 'number' },
+                      { label: 'Boolean', value: 'boolean' },
+                      { label: 'Date', value: 'date' },
+                      { label: 'Image', value: 'image' }
+                    ]}
+                    value={field.type}
+                    onChange={(e) => updateField(index, 'type', e.target.value)}
+                  />
                   <div className={styles.checkboxWrap}>
                     <input 
                       type="checkbox" 
