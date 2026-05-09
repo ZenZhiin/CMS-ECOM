@@ -26,4 +26,24 @@ export class SettingsService {
       data
     });
   }
+
+  // API Key Management
+  async getApiKeys() {
+    return this.prisma.apiKey.findMany({
+      orderBy: { createdAt: 'desc' }
+    });
+  }
+
+  async createApiKey(name: string) {
+    const key = `zh_${Array(24).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('')}`;
+    return this.prisma.apiKey.create({
+      data: { name, key }
+    });
+  }
+
+  async deleteApiKey(id: string) {
+    return this.prisma.apiKey.delete({
+      where: { id }
+    });
+  }
 }

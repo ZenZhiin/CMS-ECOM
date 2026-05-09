@@ -20,4 +20,25 @@ export class SettingsController {
   updateSettings(@Body() data: any) {
     return this.settingsService.updateSettings(data);
   }
+
+  @Get('keys')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  getKeys() {
+    return this.settingsService.getApiKeys();
+  }
+
+  @Post('keys')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  createKey(@Body('name') name: string) {
+    return this.settingsService.createApiKey(name);
+  }
+
+  @Delete('keys/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  deleteKey(@Param('id') id: string) {
+    return this.settingsService.deleteApiKey(id);
+  }
 }

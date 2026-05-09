@@ -9,6 +9,7 @@ import { MediaModule } from './media/media.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { SettingsModule } from './settings/settings.module';
+import { DeliveryModule } from './delivery/delivery.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SettingsModule } from './settings/settings.module';
       serveRoot: '/uploads',
     }),
     SettingsModule,
+    DeliveryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
