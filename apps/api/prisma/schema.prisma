@@ -16,34 +16,40 @@ enum Role {
   VIEWER
 }
 
+enum Status {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String         @id @default(uuid())
+  email     String         @unique
   password  String
-  role      Role     @default(VIEWER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role      Role           @default(VIEWER)
   entries   ContentEntry[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 }
 
 model ContentType {
-  id          String   @id @default(uuid())
-  name        String
-  slug        String   @unique
-  fields      Json     // Array of ContentField objects
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  entries     ContentEntry[]
+  id        String         @id @default(uuid())
+  name      String
+  slug      String         @unique
+  fields    Json
+  entries   ContentEntry[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 }
 
 model ContentEntry {
   id            String      @id @default(uuid())
-  contentTypeId String
   contentType   ContentType @relation(fields: [contentTypeId], references: [id])
-  data          Json        // The actual content data
-  authorId      String
+  contentTypeId String
   author        User        @relation(fields: [authorId], references: [id])
-  status        String      @default("DRAFT") // DRAFT, PUBLISHED
+  authorId      String
+  data          Json
+  status        Status      @default(DRAFT)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
