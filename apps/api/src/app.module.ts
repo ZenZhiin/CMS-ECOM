@@ -8,6 +8,7 @@ import { ContentEntryModule } from './content-entry/content-entry.module';
 import { MediaModule } from './media/media.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { join } from 'path';
       rootPath: join(__dirname, '..', 'uploads'),
       serveRoot: '/uploads',
     }),
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
