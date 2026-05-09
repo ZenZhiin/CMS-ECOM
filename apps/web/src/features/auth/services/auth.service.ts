@@ -1,5 +1,5 @@
 import { LoginDto, AuthResponse } from '@cms/shared';
-import { apiFetch } from '../lib/api';
+import { apiFetch } from '@/lib/api';
 import Cookies from 'js-cookie';
 
 export const authService = {

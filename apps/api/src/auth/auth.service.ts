@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '@/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto, LoginDto, AuthResponse } from '@cms/shared';
 
@@ -9,7 +9,7 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async register(dto: RegisterDto): Promise<AuthResponse> {
     const existingUser = await this.prisma.user.findUnique({

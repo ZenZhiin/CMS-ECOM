@@ -1,10 +1,10 @@
 import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '@/prisma/prisma.service';
 import { CreateContentTypeDto } from './dto/create-content-type.dto';
 
 @Injectable()
 export class ContentTypeService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(dto: CreateContentTypeDto) {
     const existing = await this.prisma.contentType.findUnique({
