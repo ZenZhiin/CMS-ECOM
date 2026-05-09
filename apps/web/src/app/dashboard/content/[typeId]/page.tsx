@@ -14,9 +14,7 @@ export default function EntryListPage({ params }: { params: Promise<{ typeId: st
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (typeId) {
-      fetchData();
-    }
+    if (typeId) fetchData();
   }, [typeId]);
 
   const fetchData = async () => {
@@ -109,7 +107,9 @@ export default function EntryListPage({ params }: { params: Promise<{ typeId: st
                   </td>
                   <td>{new Date(entry.createdAt).toLocaleDateString()}</td>
                   <td className={styles.actionsCell}>
-                    <button className={styles.iconBtn}><Edit size={16} /></button>
+                    <Link href={`/dashboard/content/${typeId}/${entry.id}`}>
+                      <button className={styles.iconBtn}><Edit size={16} /></button>
+                    </Link>
                     <button className={styles.iconBtn} onClick={() => handleDelete(entry.id)}>
                       <Trash2 size={16} />
                     </button>

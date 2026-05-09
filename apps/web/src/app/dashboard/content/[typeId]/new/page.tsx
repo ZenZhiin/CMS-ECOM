@@ -17,16 +17,13 @@ export default function NewEntryPage({ params }: { params: Promise<{ typeId: str
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    if (typeId) {
-      fetchContentType();
-    }
+    if (typeId) fetchContentType();
   }, [typeId]);
 
   const fetchContentType = async () => {
     try {
       const data = await apiFetch(`/content-types/${typeId}`);
       setContentType(data);
-      // Initialize form data with empty values
       const initialData: Record<string, any> = {};
       data.fields.forEach((f: any) => {
         initialData[f.name] = f.type === 'number' ? 0 : f.type === 'boolean' ? false : '';
@@ -46,14 +43,10 @@ export default function NewEntryPage({ params }: { params: Promise<{ typeId: str
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-
     try {
       await apiFetch('/content-entries', {
         method: 'POST',
-        body: JSON.stringify({
-          contentTypeId: typeId,
-          data: formData
-        }),
+        body: JSON.stringify({ contentTypeId: typeId, data: formData }),
       });
       router.push(`/dashboard/content/${typeId}`);
     } catch (err: any) {
@@ -86,54 +79,25 @@ export default function NewEntryPage({ params }: { params: Promise<{ typeId: str
                   {field.name}
                   {field.required && <span className={styles.required}>*</span>}
                 </label>
-                
                 {field.type === 'text' && (
-                  <input 
-                    type="text" 
-                    className={styles.input}
-                    value={formData[field.name] || ''}
-                    onChange={(e) => handleChange(field.name, e.target.value)}
-                    required={field.required}
-                  />
+                  <input type="text" className={styles.input} value={formData[field.name] || ''} onChange={(e) => handleChange(field.name, e.target.value)} required={field.required} />
                 )}
-
                 {field.type === 'number' && (
-                  <input 
-                    type="number" 
-                    className={styles.input}
-                    value={formData[field.name] || 0}
-                    onChange={(e) => handleChange(field.name, Number(e.target.value))}
-                    required={field.required}
-                  />
+                  <input type="number" className={styles.input} value={formData[field.name] || 0} onChange={(e) => handleChange(field.name, Number(e.target.value))} required={field.required} />
                 )}
-
                 {field.type === 'boolean' && (
                   <div className={styles.checkboxWrapper}>
-                    <input 
-                      type="checkbox" 
-                      checked={formData[field.name] || false}
-                      onChange={(e) => handleChange(field.name, e.target.checked)}
-                    />
+                    <input type="checkbox" checked={formData[field.name] || false} onChange={(e) => handleChange(field.name, e.target.checked)} />
                     <span>Active / Enabled</span>
                   </div>
                 )}
-
                 {field.type === 'date' && (
-                  <input 
-                    type="date" 
-                    className={styles.input}
-                    value={formData[field.name] || ''}
-                    onChange={(e) => handleChange(field.name, e.target.value)}
-                    required={field.required}
-                  />
+                  <input type="date" className={styles.input} value={formData[field.name] || ''} onChange={(e) => handleChange(field.name, e.target.value)} required={field.required} />
                 )}
-
-                <span className={styles.typeTag}>{field.type}</span>
               </div>
             ))}
           </div>
         </div>
-
         <div className={styles.actions}>
           <Button type="submit" size="lg" isLoading={isSaving}>
             <Save size={18} />

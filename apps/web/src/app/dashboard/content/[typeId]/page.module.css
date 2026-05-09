@@ -57,7 +57,6 @@
   outline: none;
 }
 
-/* Table */
 .tableWrapper {
   background: var(--bg-secondary);
   border: 1px solid var(--border-subtle);
@@ -124,20 +123,9 @@
   letter-spacing: 0.02em;
 }
 
-.draft {
-  background: rgba(148, 163, 184, 0.1);
-  color: #94a3b8;
-}
-
-.published {
-  background: rgba(16, 185, 129, 0.1);
-  color: #10b981;
-}
-
-.archived {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-}
+.draft { background: rgba(148, 163, 184, 0.1); color: #94a3b8; }
+.published { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+.archived { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
 
 .emptyRow {
   padding: 60px;
