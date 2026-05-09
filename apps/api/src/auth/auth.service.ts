@@ -26,6 +26,7 @@ export class AuthService {
       data: {
         email: dto.email,
         password: hashedPassword,
+        name: (dto as any).name,
         role: 'VIEWER',
       },
     });
