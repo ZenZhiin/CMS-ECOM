@@ -5,9 +5,22 @@ import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { ContentTypeModule } from './content-type/content-type.module';
 import { ContentEntryModule } from './content-entry/content-entry.module';
+import { MediaModule } from './media/media.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  imports: [PrismaModule, AuthModule, ContentTypeModule, ContentEntryModule],
+  imports: [
+    PrismaModule, 
+    AuthModule, 
+    ContentTypeModule, 
+    ContentEntryModule, 
+    MediaModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
+    }),
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
