@@ -6,6 +6,8 @@ import { ArrowLeft, Save } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 import { Select } from '@/components/atoms/Select';
 import { apiFetch } from '@/lib/api';
+import { useToast } from '@/context/ToastContext';
+import { MediaPickerModal } from '@/components/organisms/MediaPickerModal';
 import Link from 'next/link';
 import styles from './ContentEditor.module.css';
 
@@ -53,6 +55,8 @@ export const ContentEditor: React.FC<ContentEditorProps> = ({ typeId, entryId })
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const { showToast } = useToast();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
@@ -65,11 +69,21 @@ export const ContentEditor: React.FC<ContentEditorProps> = ({ typeId, entryId })
         : JSON.stringify({ contentTypeId: typeId, data: formData });
 
       await apiFetch(url, { method, body });
+      showToast(entryId ? 'Entry updated successfully' : 'Entry published successfully', 'success');
       router.push(`/dashboard/content/${typeId}`);
     } catch (err: any) {
-      alert(err.message || 'Failed to save entry');
+      showToast(err.message || 'Failed to save entry', 'error');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const [activeMediaField, setActiveMediaField] = useState<string | null>(null);
+
+  const handleMediaSelect = (url: string) => {
+    if (activeMediaField) {
+      handleChange(activeMediaField, url);
+      setActiveMediaField(null);
     }
   };
 
@@ -78,6 +92,12 @@ export const ContentEditor: React.FC<ContentEditorProps> = ({ typeId, entryId })
 
   return (
     <div className={styles.container}>
+      {activeMediaField && (
+        <MediaPickerModal 
+          onSelect={handleMediaSelect} 
+          onClose={() => setActiveMediaField(null)} 
+        />
+      )}
       <header className={styles.header}>
         <Link href={`/dashboard/content/${typeId}`} className={styles.backLink}>
           <ArrowLeft size={18} />
@@ -110,6 +130,31 @@ export const ContentEditor: React.FC<ContentEditorProps> = ({ typeId, entryId })
                       onChange={(e) => handleChange(field.name, e.target.value)}
                       required={field.required}
                     />
+                  )}
+
+                  {field.type === 'rich-text' && (
+                    <textarea 
+                      className={styles.textarea}
+                      rows={8}
+                      value={formData[field.name] || ''}
+                      onChange={(e) => handleChange(field.name, e.target.value)}
+                      required={field.required}
+                    />
+                  )}
+
+                  {field.type === 'media' && (
+                    <div className={styles.mediaPicker}>
+                      {formData[field.name] ? (
+                        <div className={styles.mediaPreview}>
+                          <img src={formData[field.name]} alt="Preview" />
+                          <button type="button" onClick={() => handleChange(field.name, '')} className={styles.removeMediaBtn}>Remove</button>
+                        </div>
+                      ) : (
+                        <Button type="button" variant="secondary" onClick={() => setActiveMediaField(field.name)}>
+                          Select Media
+                        </Button>
+                      )}
+                    </div>
                   )}
 
                   {field.type === 'number' && (

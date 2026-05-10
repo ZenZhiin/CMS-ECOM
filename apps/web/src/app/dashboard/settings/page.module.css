@@ -63,9 +63,43 @@
 }
 
 .logoPreview img {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+}
+
+.socialList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.socialItem {
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  gap: 16px;
+  align-items: flex-end;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--border-subtle);
+}
+
+.removeBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 8px;
+  transition: color 0.2s;
+}
+
+.removeBtn:hover {
+  color: #ef4444;
+}
+
+.loading {
+  padding: 80px;
+  text-align: center;
+  color: var(--text-muted);
 }
 
 .label {
@@ -97,4 +131,25 @@
 .actions {
   display: flex;
   justify-content: flex-end;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: var(--accent-primary);
+}
+
+.cardHeader h2 {
+  font-size: 18px;
+  margin: 0 !important;
+  color: var(--text-primary);
+}
+
+.logoRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
 }

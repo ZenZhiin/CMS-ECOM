@@ -16,12 +16,50 @@
   margin-bottom: 4px;
 }
 
-.headerInfo p {
+.header p {
   color: var(--text-secondary);
   font-size: 14px;
 }
 
+.tabs {
+  display: flex;
+  gap: 8px;
+  background: var(--bg-secondary);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  width: fit-content;
+  margin-bottom: 24px;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.activeTab {
+  background: var(--bg-primary) !important;
+  color: var(--accent-primary) !important;
+  box-shadow: var(--shadow-sm);
+}
+
 .content {
+  background: var(--bg-secondary);
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -104,4 +142,39 @@
 .footer {
   display: flex;
   justify-content: flex-end;
+}
+
+.itemActions {
+  display: flex;
+  gap: 4px;
+}
+
+.addBtn {
+  background: none;
+  border: 1px solid var(--border-subtle);
+  color: var(--accent-primary);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.addBtn:hover {
+  background: var(--accent-primary);
+  color: white;
+  border-color: var(--accent-primary);
+}
+
+.childrenList {
+  border-left: 2px solid var(--border-subtle);
+  margin-left: 12px;
+  padding-left: 12px;
+}
+
+.menuItem:hover {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-sm);
 }

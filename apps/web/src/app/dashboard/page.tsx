@@ -1,83 +1,128 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import {
-  FilePlus,
-  BarChart3,
+  FileText,
+  Database,
+  ImageIcon,
+  Users,
   Clock,
-  TrendingUp,
-  FileCheck,
-  AlertCircle
+  Key,
+  Settings,
+  Plus
 } from 'lucide-react';
+import { apiFetch } from '@/lib/api';
+import Link from 'next/link';
 import styles from './page.module.css';
 
 export default function DashboardPage() {
-  const stats = [
-    { label: 'Total Pages', value: '24', icon: FilePlus, color: '#6366f1' },
-    { label: 'Published', value: '18', icon: FileCheck, color: '#10b981' },
-    { label: 'Drafts', value: '6', icon: AlertCircle, color: '#f59e0b' },
-    { label: 'Avg. Views', value: '1.2k', icon: TrendingUp, color: '#8b5cf6' },
+  const [stats, setStats] = useState({
+    contentTypes: 0,
+    entries: 0,
+    media: 0,
+    users: 0
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      const [cts, entries, media, users] = await Promise.all([
+        apiFetch('/content-types'),
+        apiFetch('/content-entries'),
+        apiFetch('/media'),
+        apiFetch('/users')
+      ]);
+      
+      setStats({
+        contentTypes: cts.length,
+        entries: entries.length,
+        media: media.length,
+        users: users.length
+      });
+    } catch (err) {
+      console.error('Failed to fetch dashboard stats', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const statCards = [
+    { label: 'Content Models', value: stats.contentTypes, icon: Database, color: '#8b5cf6', link: '/dashboard/content-types' },
+    { label: 'Total Entries', value: stats.entries, icon: FileText, color: '#3b82f6', link: '/dashboard/content' },
+    { label: 'Media Assets', value: stats.media, icon: ImageIcon, color: '#10b981', link: '/dashboard/media' },
+    { label: 'Team Members', value: stats.users, icon: Users, color: '#f59e0b', link: '/dashboard/team' }
   ];
 
   return (
     <div className={styles.container}>
       <header className={styles.header}>
         <h1 className="brand-font">Dashboard Overview</h1>
-        <p>Welcome to Zhiin CMS. Here's what's happening with your content.</p>
+        <p>Welcome back! Here is what is happening in your CMS.</p>
       </header>
 
-      {/* Stats Grid */}
       <div className={styles.statsGrid}>
-        {stats.map((stat) => (
-          <div key={stat.label} className={styles.statCard}>
+        {statCards.map((stat) => (
+          <Link href={stat.link} key={stat.label} className={styles.statCard}>
             <div className={styles.statIcon} style={{ backgroundColor: `${stat.color}15`, color: stat.color }}>
               <stat.icon size={24} />
             </div>
             <div className={styles.statInfo}>
               <span className={styles.statLabel}>{stat.label}</span>
-              <span className={styles.statValue}>{stat.value}</span>
+              <span className={styles.statValue}>{isLoading ? '...' : stat.value}</span>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 
       <div className={styles.sections}>
-        {/* Recent Activity */}
         <section className={styles.recentActivity}>
           <div className={styles.sectionHeader}>
             <div className={styles.titleWrap}>
-              <Clock size={20} className={styles.titleIcon} />
-              <h2>Recent Activity</h2>
+              <Plus size={20} className={styles.titleIcon} />
+              <h2>Quick Actions</h2>
             </div>
-            <button className={styles.viewAll}>View All</button>
           </div>
 
-          <div className={styles.activityList}>
-            {[1, 2, 3].map((i) => (
-              <div key={i} className={styles.activityItem}>
-                <div className={styles.activityAvatar}>JD</div>
-                <div className={styles.activityContent}>
-                  <p><strong>John Doe</strong> updated <strong>Pricing Page</strong></p>
-                  <span>2 hours ago</span>
-                </div>
-              </div>
-            ))}
+          <div className={styles.actionGrid}>
+            <Link href="/dashboard/content-types/new" className={styles.actionItem}>
+              <div className={styles.actionIcon}><Plus size={18} /></div>
+              <span>Create New Content Model</span>
+            </Link>
+            <Link href="/dashboard/settings/api-keys" className={styles.actionItem}>
+              <div className={styles.actionIcon}><Key size={18} /></div>
+              <span>Manage API Delivery Keys</span>
+            </Link>
+            <Link href="/dashboard/settings/navigation" className={styles.actionItem}>
+              <div className={styles.actionIcon}><Settings size={18} /></div>
+              <span>Configure Navigation Menu</span>
+            </Link>
           </div>
         </section>
 
-        {/* Traffic Chart Placeholder */}
         <section className={styles.trafficChart}>
           <div className={styles.sectionHeader}>
             <div className={styles.titleWrap}>
-              <BarChart3 size={20} className={styles.titleIcon} />
-              <h2>Content Performance</h2>
+              <Clock size={20} className={styles.titleIcon} />
+              <h2>System Status</h2>
             </div>
           </div>
-          <div className={styles.chartPlaceholder}>
-            <div className={styles.bar} style={{ height: '40%' }}></div>
-            <div className={styles.bar} style={{ height: '70%' }}></div>
-            <div className={styles.bar} style={{ height: '50%' }}></div>
-            <div className={styles.bar} style={{ height: '90%' }}></div>
-            <div className={styles.bar} style={{ height: '60%' }}></div>
-            <div className={styles.bar} style={{ height: '80%' }}></div>
+          <div className={styles.statusContent}>
+            <div className={styles.statusItem}>
+              <span className={styles.statusLabel}>API Service</span>
+              <span className={styles.statusValue} style={{ color: '#10b981' }}>Operational</span>
+            </div>
+            <div className={styles.statusItem}>
+              <span className={styles.statusLabel}>Database</span>
+              <span className={styles.statusValue} style={{ color: '#10b981' }}>Connected</span>
+            </div>
+            <div className={styles.statusItem}>
+              <span className={styles.statusLabel}>Media Storage</span>
+              <span className={styles.statusValue} style={{ color: '#10b981' }}>Available</span>
+            </div>
           </div>
         </section>
       </div>

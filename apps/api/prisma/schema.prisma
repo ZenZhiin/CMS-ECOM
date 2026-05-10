@@ -75,6 +75,8 @@ model GlobalSettings {
   siteName     String   @default("Zhiin CMS") @map("site_name")
   siteLogo     String?  @map("site_logo")
   navigation   Json     @default("[]") @map("navigation")
+  footerNavigation Json @default("[]") @map("footer_navigation")
+  socialLinks  Json     @default("[]") @map("social_links")
   footerText   String?  @map("footer_text")
   updatedAt    DateTime @updatedAt @map("updated_at")
 

@@ -7,6 +7,10 @@ export class ContentEntryService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateContentEntryDto, authorId: string) {
+    if (!authorId) {
+      throw new BadRequestException('User context is missing. Please ensure you are logged in.');
+    }
+
     const contentType = await this.prisma.contentType.findUnique({
       where: { id: dto.contentTypeId },
     });
@@ -19,9 +23,13 @@ export class ContentEntryService {
 
     return this.prisma.contentEntry.create({
       data: {
-        contentTypeId: dto.contentTypeId,
-        authorId: authorId,
         data: dto.data,
+        contentType: {
+          connect: { id: dto.contentTypeId }
+        },
+        author: {
+          connect: { id: authorId }
+        }
       },
     });
   }

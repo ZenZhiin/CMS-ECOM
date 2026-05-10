@@ -108,10 +108,11 @@ export default function NewContentTypePage() {
                     label="Type"
                     options={[
                       { label: 'Text', value: 'text' },
+                      { label: 'Rich Text', value: 'rich-text' },
                       { label: 'Number', value: 'number' },
                       { label: 'Boolean', value: 'boolean' },
                       { label: 'Date', value: 'date' },
-                      { label: 'Image', value: 'image' }
+                      { label: 'Media Picker', value: 'media' }
                     ]}
                     value={field.type}
                     onChange={(e) => updateField(index, 'type', e.target.value)}

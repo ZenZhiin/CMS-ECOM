@@ -1,7 +1,34 @@
 import styles from './landing.module.css';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import DynamicPage from './[slug]/page';
 
-export default function LandingPage() {
+async function getHomeData() {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/delivery/home`, {
+      headers: {
+        'x-api-key': process.env.INTERNAL_API_KEY || ''
+      },
+      next: { revalidate: 60 }
+    });
+
+    if (!response.ok) return null;
+    const data = await response.json();
+    return data && data.length > 0 ? data : null;
+  } catch (err) {
+    return null;
+  }
+}
+
+export default async function LandingPage() {
+  const homeData = await getHomeData();
+
+  // If we have home content in the CMS, render the dynamic page
+  if (homeData) {
+    return <DynamicPage params={Promise.resolve({ slug: 'home' })} />;
+  }
+
+  // Fallback to original static landing page if no "home" content exists
   return (
     <main className={styles.main}>
       <div className={styles.blob}></div>
@@ -21,7 +48,9 @@ export default function LandingPage() {
         <p>A high-performance, headless CMS designed for modern digital experiences. Define, manage, and deliver content with unparalleled speed.</p>
 
         <div className={styles.actions}>
-          <button className={styles.primaryBtn}>Explore Documentation</button>
+          <Link href="/admin">
+            <button className={styles.primaryBtn}>Get Started</button>
+          </Link>
           <button className={styles.secondaryBtn}>View Source</button>
         </div>
       </div>

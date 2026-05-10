@@ -3,10 +3,11 @@ import { Type } from 'class-transformer';
 
 export enum FieldType {
   TEXT = 'text',
+  RICH_TEXT = 'rich-text',
   NUMBER = 'number',
   BOOLEAN = 'boolean',
   DATE = 'date',
-  IMAGE = 'image',
+  MEDIA = 'media',
 }
 
 export class ContentFieldDto {
