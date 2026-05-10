@@ -92,3 +92,25 @@ model ApiKey {
 
   @@map("api_keys")
 }
+
+model Form {
+  id          String           @id @default(uuid())
+  name        String
+  slug        String           @unique
+  fields      Json             @map("fields") // JSON definition of form fields
+  submissions FormSubmission[]
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  @@map("forms")
+}
+
+model FormSubmission {
+  id        String   @id @default(uuid())
+  form      Form     @relation(fields: [formId], references: [id])
+  formId    String   @map("form_id")
+  data      Json     @map("data") // Captured form data
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("form_submissions")
+}
