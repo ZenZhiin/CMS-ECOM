@@ -115,14 +115,11 @@ export default async function DynamicPage({ params }: PageProps) {
 
           {entry.form && (
             <aside className={styles.formSidebar}>
-              <div className={styles.formCard}>
-                <h3 className="brand-font">{entry.form.name}</h3>
-                <FormRenderer 
-                  slug={entry.form.slug} 
-                  name={entry.form.name} 
-                  fields={entry.form.fields} 
-                />
-              </div>
+              <FormRenderer 
+                slug={entry.form.slug} 
+                name={entry.form.name} 
+                fields={entry.form.fields} 
+              />
             </aside>
           )}
         </div>
