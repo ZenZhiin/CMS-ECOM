@@ -41,9 +41,10 @@
 
 .contentGrid {
   display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 80px;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
   padding-bottom: 120px;
+  align-items: start;
 }
 
 .mainContent {
