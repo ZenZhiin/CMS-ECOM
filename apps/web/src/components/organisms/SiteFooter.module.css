@@ -11,37 +11,127 @@
   padding: 0 24px;
 }
 
-.top {
+.main {
   display: flex;
-  flex-direction: column;
-  gap: 24px;
+  justify-content: space-between;
+  gap: 48px;
   margin-bottom: 60px;
 }
 
 .brand {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 320px;
 }
 
-.logo {
-  width: 28px;
-  height: 28px;
-  background: var(--text-muted);
-  color: var(--bg-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  font-weight: 800;
-  font-size: 14px;
+.brand h2 {
+  font-size: 24px;
+  color: var(--text-primary);
+  margin: 0;
 }
 
 .tagline {
   font-size: 14px;
   color: var(--text-muted);
-  max-width: 300px;
   line-height: 1.6;
+}
+
+.social {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.socialIcon {
+  width: 36px;
+  height: 36px;
+  color: var(--text-muted);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.initial {
+  font-family: var(--font-brand), system-ui;
+}
+
+/* Brand Specific Hover Colors */
+.socialIcon[data-platform*="facebook"]:hover {
+  background: #1877f2;
+  color: white;
+  border-color: #1877f2;
+  transform: translateY(-3px);
+}
+
+.socialIcon[data-platform*="instagram"]:hover {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-3px);
+}
+
+.socialIcon[data-platform*="linkedin"]:hover {
+  background: #0077b5;
+  color: white;
+  border-color: #0077b5;
+  transform: translateY(-3px);
+}
+
+.socialIcon[data-platform*="twitter"]:hover,
+.socialIcon[data-platform*="x"]:hover {
+  background: #000000;
+  color: white;
+  border-color: #333;
+  transform: translateY(-3px);
+}
+
+.socialIcon[data-platform*="youtube"]:hover {
+  background: #ff0000;
+  color: white;
+  border-color: #ff0000;
+  transform: translateY(-3px);
+}
+
+.navSections {
+  display: flex;
+  gap: 60px;
+}
+
+.navGroup h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.navGroup ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.navGroup a {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.navGroup a:hover {
+  color: var(--accent-primary);
 }
 
 .bottom {
@@ -57,23 +147,33 @@
   color: var(--text-muted);
 }
 
-.links {
+.legal {
   display: flex;
   gap: 24px;
 }
 
-.links a {
+.legal a {
   font-size: 13px;
   color: var(--text-muted);
   text-decoration: none;
   transition: color 0.2s;
 }
 
-.links a:hover {
+.legal a:hover {
   color: var(--text-primary);
 }
 
 @media (max-width: 768px) {
+  .main {
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .navSections {
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
   .bottom {
     flex-direction: column;
     gap: 20px;

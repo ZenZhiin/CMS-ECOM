@@ -40,11 +40,12 @@ export default function DashboardLayout({
   const navItems = [
     { icon: LayoutDashboard, label: 'Overview', href: '/dashboard' },
     { icon: Database, label: 'Content Builder', href: '/dashboard/content-types' },
-    { icon: FileText, label: 'Content Entries', href: '/dashboard/content' },
+    { icon: FileText, label: 'Content Manager', href: '/dashboard/content' },
     { icon: ImageIcon, label: 'Media Library', href: '/dashboard/media' },
+    { icon: Database, label: 'Navigation', href: '/dashboard/settings/navigation' },
+    { icon: FileText, label: 'Forms', href: '/dashboard/forms' },
     { icon: Users, label: 'Team', href: '/dashboard/team' },
     { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
-    { icon: Database, label: 'Navigation', href: '/dashboard/settings/navigation' },
     { icon: Key, label: 'API Keys', href: '/dashboard/settings/api-keys' },
   ];
 

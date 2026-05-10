@@ -20,7 +20,9 @@ export default function DashboardPage() {
     contentTypes: 0,
     entries: 0,
     media: 0,
-    users: 0
+    users: 0,
+    forms: 0,
+    submissions: 0
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,18 +32,23 @@ export default function DashboardPage() {
 
   const fetchStats = async () => {
     try {
-      const [cts, entries, media, users] = await Promise.all([
+      const [cts, entries, media, users, forms] = await Promise.all([
         apiFetch('/content-types'),
         apiFetch('/content-entries'),
         apiFetch('/media'),
-        apiFetch('/users')
+        apiFetch('/users'),
+        apiFetch('/forms')
       ]);
       
+      const totalSubmissions = forms.reduce((acc: number, f: any) => acc + (f._count?.submissions || 0), 0);
+
       setStats({
         contentTypes: cts.length,
         entries: entries.length,
         media: media.length,
-        users: users.length
+        users: users.length,
+        forms: forms.length,
+        submissions: totalSubmissions
       });
     } catch (err) {
       console.error('Failed to fetch dashboard stats', err);
@@ -53,8 +60,8 @@ export default function DashboardPage() {
   const statCards = [
     { label: 'Content Models', value: stats.contentTypes, icon: Database, color: '#8b5cf6', link: '/dashboard/content-types' },
     { label: 'Total Entries', value: stats.entries, icon: FileText, color: '#3b82f6', link: '/dashboard/content' },
-    { label: 'Media Assets', value: stats.media, icon: ImageIcon, color: '#10b981', link: '/dashboard/media' },
-    { label: 'Team Members', value: stats.users, icon: Users, color: '#f59e0b', link: '/dashboard/team' }
+    { label: 'Lead Forms', value: stats.forms, icon: FileText, color: '#f43f5e', link: '/dashboard/forms' },
+    { label: 'Total Leads', value: stats.submissions, icon: Users, color: '#10b981', link: '/dashboard/forms' }
   ];
 
   return (

@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Save, Globe, Image as ImageIcon, Plus, Trash2, Share2 } from 'lucide-react';
+import { Save, Globe, Image as ImageIcon, Plus, Trash2, Share2, Upload } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
+import { Select } from '@/components/atoms/Select';
 import { apiFetch } from '@/lib/api';
 import { useToast } from '@/context/ToastContext';
 import { MediaPickerModal } from '@/components/organisms/MediaPickerModal';
@@ -20,6 +21,7 @@ export default function GeneralSettingsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
+  const [activeSocialIndex, setActiveSocialIndex] = useState<number | null>(null);
 
   useEffect(() => {
     fetchSettings();
@@ -42,7 +44,7 @@ export default function GeneralSettingsPage() {
   const addSocialLink = () => {
     setSettings({
       ...settings,
-      socialLinks: [...settings.socialLinks, { label: '', url: '', platform: 'custom' }]
+      socialLinks: [...settings.socialLinks, { label: '', url: '', platform: 'custom', iconUrl: '' }]
     });
   };
 
@@ -82,10 +84,18 @@ export default function GeneralSettingsPage() {
       {isMediaModalOpen && (
         <MediaPickerModal 
           onSelect={(url) => {
-            setSettings({...settings, siteLogo: url});
+            if (activeSocialIndex !== null) {
+              updateSocialLink(activeSocialIndex, 'iconUrl', url);
+              setActiveSocialIndex(null);
+            } else {
+              setSettings({...settings, siteLogo: url});
+            }
             setIsMediaModalOpen(false);
           }}
-          onClose={() => setIsMediaModalOpen(false)}
+          onClose={() => {
+            setIsMediaModalOpen(false);
+            setActiveSocialIndex(null);
+          }}
         />
       )}
 
@@ -118,7 +128,10 @@ export default function GeneralSettingsPage() {
                     <ImageIcon size={24} />
                   )}
                 </div>
-                <Button type="button" variant="secondary" size="sm" onClick={() => setIsMediaModalOpen(true)}>
+                <Button type="button" variant="secondary" size="sm" onClick={() => {
+                  setActiveSocialIndex(null);
+                  setIsMediaModalOpen(true);
+                }}>
                   Change Logo
                 </Button>
                 {settings.siteLogo && (
@@ -144,37 +157,83 @@ export default function GeneralSettingsPage() {
         <div className={styles.card}>
           <div className={styles.cardHeader}>
             <Share2 size={20} />
-            <h2>Social Media Links</h2>
+            <h2>Social Media Presence</h2>
           </div>
           <div className={styles.socialList}>
+            <div className={styles.socialHeader}>
+              <span>Platform</span>
+              <span>Label</span>
+              <span>URL</span>
+              <span>Custom Icon</span>
+              <span></span>
+            </div>
             {settings.socialLinks.map((link: any, index: number) => (
-              <div key={index} className={styles.socialItem}>
+              <div key={index} className={styles.socialGridItem}>
+                <Select 
+                  value={link.platform || 'custom'}
+                  onChange={(e) => updateSocialLink(index, 'platform', e.target.value)}
+                  options={[
+                    { label: 'Custom', value: 'custom' },
+                    { label: 'Facebook', value: 'facebook' },
+                    { label: 'Instagram', value: 'instagram' },
+                    { label: 'LinkedIn', value: 'linkedin' },
+                    { label: 'Twitter/X', value: 'twitter' },
+                    { label: 'YouTube', value: 'youtube' }
+                  ]}
+                />
                 <Input 
-                  placeholder="Platform (e.g. LinkedIn)"
+                  placeholder="e.g. Facebook"
                   value={link.label}
                   onChange={(e) => updateSocialLink(index, 'label', e.target.value)}
                 />
                 <Input 
-                  placeholder="URL (https://...)"
+                  placeholder="https://..."
                   value={link.url}
                   onChange={(e) => updateSocialLink(index, 'url', e.target.value)}
                 />
+                <div className={styles.customIconWrap}>
+                  <div className={styles.miniPreview}>
+                    {link.iconUrl ? <img src={link.iconUrl} alt="Icon" /> : <div className={styles.placeholder} />}
+                  </div>
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => {
+                      setActiveSocialIndex(index);
+                      setIsMediaModalOpen(true);
+                    }}
+                  >
+                    <Upload size={14} />
+                  </Button>
+                  {link.iconUrl && (
+                    <button 
+                      type="button" 
+                      className={styles.clearBtn} 
+                      onClick={() => updateSocialLink(index, 'iconUrl', '')}
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
                 <button type="button" className={styles.removeBtn} onClick={() => removeSocialLink(index)}>
                   <Trash2 size={18} />
                 </button>
               </div>
             ))}
-            <Button type="button" variant="ghost" size="sm" onClick={addSocialLink}>
-              <Plus size={16} />
-              Add Social Link
-            </Button>
+            <div className={styles.socialActions}>
+              <Button type="button" variant="ghost" size="sm" onClick={addSocialLink}>
+                <Plus size={16} />
+                Add Social Channel
+              </Button>
+            </div>
           </div>
         </div>
 
         <div className={styles.actions}>
           <Button type="submit" isLoading={isSaving} size="lg">
             <Save size={18} />
-            Update Branding
+            Update Site Identity
           </Button>
         </div>
       </form>
