@@ -1,0 +1,70 @@
+.toggle, .togglePlaceholder {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.togglePlaceholder {
+  cursor: default;
+  color: var(--text-muted);
+}
+
+.toggle:hover {
+  background: var(--bg-tertiary);
+}
+
+.iconWrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  color: var(--text-primary);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glow {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: var(--accent-primary);
+  filter: blur(12px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.isDark .icon {
+  color: #fcd34d; /* Warm lightbulb glow */
+  filter: drop-shadow(0 0 5px rgba(252, 211, 77, 0.5));
+}
+
+.isDark .glow {
+  opacity: 0.2;
+  background: #fcd34d;
+}
+
+.isLight .icon {
+  color: var(--text-muted);
+}
+
+.isLight .glow {
+  opacity: 0;
+}
+
+.toggle:active .icon {
+  transform: scale(0.9);
+}

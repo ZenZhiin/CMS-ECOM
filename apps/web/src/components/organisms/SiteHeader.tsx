@@ -42,6 +42,8 @@ const NavLink: React.FC<{ item: NavItem; level?: number }> = ({ item, level = 0 
   );
 };
 
+import { ThemeToggle } from '@/components/atoms/ThemeToggle';
+
 export const SiteHeader: React.FC<SiteHeaderProps> = ({ siteName, navigation }) => {
   return (
     <header className={styles.header}>
@@ -51,11 +53,17 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({ siteName, navigation }) 
           <span className="brand-font">{siteName}</span>
         </Link>
 
-        <nav className={styles.nav}>
-          {navigation.map((item, i) => (
-            <NavLink key={i} item={item} />
-          ))}
-        </nav>
+        <div className={styles.right}>
+          <nav className={styles.nav}>
+            {navigation.map((item, i) => (
+              <NavLink key={i} item={item} />
+            ))}
+          </nav>
+          
+          <div className={styles.actions}>
+            <ThemeToggle />
+          </div>
+        </div>
       </div>
     </header>
   );

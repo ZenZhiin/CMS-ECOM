@@ -128,8 +128,21 @@
   border-color: var(--accent-primary);
 }
 
+.right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  padding-left: 24px;
+  border-left: 1px solid var(--border-subtle);
+}
+
 @media (max-width: 768px) {
-  .navLink {
+  .nav {
     display: none;
   }
 }

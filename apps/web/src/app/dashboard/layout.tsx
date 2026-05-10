@@ -15,6 +15,7 @@ import {
   X,
   Key
 } from 'lucide-react';
+import { ThemeToggle } from '@/components/atoms/ThemeToggle';
 import styles from './layout.module.css';
 
 export default function DashboardLayout({
@@ -82,12 +83,15 @@ export default function DashboardLayout({
             {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
 
-          <div className={styles.userProfile}>
-            <div className={styles.userInfo}>
-              <span className={styles.userName}>{user.email}</span>
-              <span className={styles.userRole}>{user.role}</span>
+          <div className={styles.headerActions}>
+            <ThemeToggle />
+            <div className={styles.userProfile}>
+              <div className={styles.userInfo}>
+                <span className={styles.userName}>{user.email}</span>
+                <span className={styles.userRole}>{user.role}</span>
+              </div>
+              <div className={styles.avatar}>{user.email[0].toUpperCase()}</div>
             </div>
-            <div className={styles.avatar}>{user.email[0].toUpperCase()}</div>
           </div>
         </header>
 

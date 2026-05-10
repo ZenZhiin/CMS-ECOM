@@ -24,6 +24,7 @@
 ## 5. API Delivery (Headless)
 - [x] RESTful Content Delivery API `✅ Complete`
 - [x] API Key Management `✅ Complete`
+- [ ] GraphQL Integration (Optional) `⏳ Pending`
 
 ## 6. Global Site Settings
 - [x] Site Identity (Logo, Title, Favicon) `✅ Complete`
@@ -42,22 +43,22 @@
 - [ ] Cookie Consent Management `⏳ Pending`
 
 ## 9. Appearance & UX
-- [ ] **Dark/Light Mode Theme Toggle** (Lightbulb icons in header) `⏳ In Progress`
+- [x] **Dark/Light Mode Theme Toggle** (Lightbulb icons in header) `✅ Complete`
 - [ ] Custom Font Loader (Google Fonts Integration) `⏳ Pending`
 
 ## 10. E-commerce Feature
-- [ ] **E-commerce Implementation Plan** (Write into e-commerce.md) `⏳ Next`
-- [ ] E-commerce and CMS database is seperate
-- [ ] backend api is seperate also 
-- [ ] Setting toggle enable/disable E-commerce feature
+- [ ] **E-commerce Implementation Plan** (Drafted in e-commerce.md) `✅ Complete`
+- [ ] E-commerce and CMS database is separate `⏳ Pending`
+- [ ] Backend API is separate also `⏳ Pending`
+- [ ] Setting toggle enable/disable E-commerce feature `⏳ Pending`
 - [ ] Product Catalog & Inventory Management `⏳ Pending`
 - [ ] Shopping Cart & Checkout Flow `⏳ Pending`
 
 ---
 
 ## Gaps to build (Current Focus)
-1. **Theme Toggle:** Implement a sleek light/dark mode switch in the header using lightbulb icons.
-2. **Email Integration:** Connect form submissions to Resend or SendGrid for real-time lead alerts.
-3. **E-commerce Architecture:** Research and document the implementation plan for the commerce engine.
+1. **Email Integration:** Connect form submissions to Resend or SendGrid for real-time lead alerts.
+2. **E-commerce Architecture:** Begin Phase 1 (Product Catalog Schema) implementation based on the plan.
+3. **Image Optimization:** Implement automatic resizing and WebP conversion for media assets.
 
-**Project Status:** Lead Engine and Page Architecture are robust. Transitioning to visual polish (Theme Mode) and future-proofing for E-commerce.
+**Project Status:** Platform is production-ready for content and lead generation. Appearance system is fully refined. Transitioning to commerce and automation.
