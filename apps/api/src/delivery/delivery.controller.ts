@@ -7,53 +7,6 @@ import { ApiKeyGuard } from '@/common/guards/api-key.guard';
 export class DeliveryController {
   constructor(private prisma: PrismaService) {}
 
-  @Get(':slug')
-  async getEntries(@Param('slug') slug: string) {
-    const contentType = await this.prisma.contentType.findUnique({
-      where: { slug },
-    });
-
-    if (!contentType) {
-      throw new NotFoundException(`Content type "${slug}" not found`);
-    }
-
-    return this.prisma.contentEntry.findMany({
-      where: {
-        contentTypeId: contentType.id,
-        status: 'PUBLISHED',
-      },
-      select: {
-        id: true,
-        data: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
-  }
-
-  @Get(':slug/:id')
-  async getEntry(@Param('slug') slug: string, @Param('id') id: string) {
-    const entry = await this.prisma.contentEntry.findFirst({
-      where: {
-        id,
-        status: 'PUBLISHED',
-        contentType: { slug },
-      },
-      select: {
-        id: true,
-        data: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
-
-    if (!entry) {
-      throw new NotFoundException('Entry not found or not published');
-    }
-
-    return entry;
-  }
-
   @Get('settings/global')
   async getSettings() {
     const settings = await this.prisma.globalSettings.findUnique({
@@ -61,7 +14,6 @@ export class DeliveryController {
     });
 
     if (!settings) {
-      // Return default if not found
       return {
         siteName: 'Zhiin CMS',
         navigation: [],
@@ -72,5 +24,81 @@ export class DeliveryController {
     }
 
     return settings;
+  }
+
+  @Get(':slug')
+  async getEntries(@Param('slug') slug: string) {
+    const contentType = await this.prisma.contentType.findUnique({
+      where: { slug },
+    });
+
+    if (!contentType) {
+      // Fallback: If no content type matches, check if it's a specific 'page' entry
+      const pageEntry = await this.prisma.contentEntry.findFirst({
+        where: {
+          contentType: { slug: 'page' },
+          status: 'PUBLISHED',
+          data: { path: ['slug'], equals: slug }
+        },
+        include: { contentType: true }
+      });
+
+      if (pageEntry) {
+        let form = null;
+        if (pageEntry.data && (pageEntry.data as any).formSlug) {
+          form = await this.prisma.form.findUnique({
+            where: { slug: (pageEntry.data as any).formSlug },
+          });
+        }
+        return [{ ...pageEntry, form }];
+      }
+
+      throw new NotFoundException(`Content type or Page "${slug}" not found`);
+    }
+
+    const entries = await this.prisma.contentEntry.findMany({
+      where: {
+        contentTypeId: contentType.id,
+        status: 'PUBLISHED',
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    return Promise.all(entries.map(async (entry) => {
+      let form = null;
+      if (entry.data && (entry.data as any).formSlug) {
+        form = await this.prisma.form.findUnique({
+          where: { slug: (entry.data as any).formSlug },
+        });
+      }
+      return { ...entry, form };
+    }));
+  }
+
+  @Get(':slug/:id')
+  async getEntry(@Param('slug') slug: string, @Param('id') id: string) {
+    const entry = await this.prisma.contentEntry.findFirst({
+      where: {
+        id,
+        status: 'PUBLISHED',
+        contentType: { slug },
+      },
+    });
+
+    if (!entry) {
+      throw new NotFoundException('Entry not found or not published');
+    }
+
+    let form = null;
+    if (entry.data && (entry.data as any).formSlug) {
+      form = await this.prisma.form.findUnique({
+        where: { slug: (entry.data as any).formSlug },
+      });
+    }
+
+    return {
+      ...entry,
+      form,
+    };
   }
 }
