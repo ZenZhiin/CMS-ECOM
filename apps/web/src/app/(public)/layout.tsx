@@ -8,7 +8,7 @@ async function getSiteSettings() {
       headers: {
         'x-api-key': process.env.INTERNAL_API_KEY || ''
       },
-      next: { revalidate: 300 } // Cache settings for 5 minutes
+      next: { revalidate: 60 } // Cache settings for 1 minute
     });
 
     if (!response.ok) return { siteName: 'Zhiin CMS', navigation: [] };

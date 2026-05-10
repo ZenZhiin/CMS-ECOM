@@ -11,6 +11,7 @@ import { join } from 'path';
 import { SettingsModule } from './settings/settings.module';
 import { DeliveryModule } from './delivery/delivery.module';
 import { UsersModule } from './users/users.module';
+import { FormsModule } from './forms/forms.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UsersModule } from './users/users.module';
     SettingsModule,
     DeliveryModule,
     UsersModule,
+    FormsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
