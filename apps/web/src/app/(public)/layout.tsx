@@ -36,6 +36,10 @@ export default async function PublicLayout({
         footerNavigation={settings.navigation} 
         socialLinks={settings.socialLinks}
         footerText={settings.footerText}
+        companyName={settings.companyName}
+        companyAddress={settings.companyAddress}
+        companyPhone={settings.companyPhone}
+        companyEmail={settings.companyEmail}
       />
     </div>
   );

@@ -61,7 +61,13 @@ CREATE TABLE "global_settings" (
     "site_name" TEXT NOT NULL DEFAULT 'Zhiin CMS',
     "site_logo" TEXT,
     "navigation" JSONB NOT NULL DEFAULT '[]',
+    "footer_navigation" JSONB NOT NULL DEFAULT '[]',
+    "social_links" JSONB NOT NULL DEFAULT '[]',
     "footer_text" TEXT,
+    "company_name" TEXT,
+    "company_address" TEXT,
+    "company_phone" TEXT,
+    "company_email" TEXT,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "global_settings_pkey" PRIMARY KEY ("id")
@@ -78,6 +84,28 @@ CREATE TABLE "api_keys" (
     CONSTRAINT "api_keys_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "forms" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "fields" JSONB NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "forms_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "form_submissions" (
+    "id" TEXT NOT NULL,
+    "form_id" TEXT NOT NULL,
+    "data" JSONB NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "form_submissions_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
@@ -87,8 +115,14 @@ CREATE UNIQUE INDEX "content_types_slug_key" ON "content_types"("slug");
 -- CreateIndex
 CREATE UNIQUE INDEX "api_keys_key_key" ON "api_keys"("key");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "forms_slug_key" ON "forms"("slug");
+
 -- AddForeignKey
 ALTER TABLE "content_entries" ADD CONSTRAINT "content_entries_content_type_id_fkey" FOREIGN KEY ("content_type_id") REFERENCES "content_types"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "content_entries" ADD CONSTRAINT "content_entries_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "form_submissions" ADD CONSTRAINT "form_submissions_form_id_fkey" FOREIGN KEY ("form_id") REFERENCES "forms"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

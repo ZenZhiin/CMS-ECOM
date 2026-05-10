@@ -41,13 +41,22 @@ interface SiteFooterProps {
   footerNavigation?: any[];
   socialLinks?: any[];
   footerText?: string;
+  // Company Details
+  companyName?: string;
+  companyAddress?: string;
+  companyPhone?: string;
+  companyEmail?: string;
 }
 
 export const SiteFooter: React.FC<SiteFooterProps> = ({
-  siteName = 'Zhiin CMS',
+  siteName = 'Zhiin Digital',
   footerNavigation = [],
   socialLinks = [],
-  footerText = ''
+  footerText = '',
+  companyName,
+  companyAddress,
+  companyPhone,
+  companyEmail
 }) => {
   return (
     <footer className={styles.footer}>
@@ -76,7 +85,7 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({
 
           <div className={styles.navSections}>
             <div className={styles.navGroup}>
-              <h3>Navigation</h3>
+              <h3>Menu</h3>
               <ul>
                 {footerNavigation.map((link, idx) => (
                   <li key={idx}>
@@ -86,6 +95,16 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({
               </ul>
             </div>
           </div>
+
+          <div className={styles.companyInfo}>
+            <h3>Company</h3>
+            <div className={styles.infoList}>
+              {companyName && <p className={styles.companyName}>{companyName}</p>}
+              {companyAddress && <p>{companyAddress}</p>}
+              {companyPhone && <p>{companyPhone}</p>}
+              {companyEmail && <p>{companyEmail}</p>}
+            </div>
+          </div>
         </div>
 
         <div className={styles.bottom}>
@@ -93,8 +112,8 @@ export const SiteFooter: React.FC<SiteFooterProps> = ({
             © {new Date().getFullYear()} {siteName}. All rights reserved.
           </p>
           <div className={styles.legal}>
-            <a href="/privacy-policy">Privacy</a>
-            <a href="/terms-of-service">Terms</a>
+            <a href="/privacy-policy">Privacy Policy</a>
+            <a href="/terms-of-service">Terms of Service</a>
           </div>
         </div>
       </div>

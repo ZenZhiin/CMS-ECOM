@@ -156,6 +156,41 @@ export default function GeneralSettingsPage() {
 
         <div className={styles.card}>
           <div className={styles.cardHeader}>
+            <Plus size={20} />
+            <h2>Company Details</h2>
+          </div>
+          <div className={styles.grid}>
+            <Input 
+              label="Company Name" 
+              value={settings.companyName || ''} 
+              onChange={(e) => setSettings({...settings, companyName: e.target.value})}
+              placeholder="e.g. Zhiin Digital Studio"
+            />
+            <Input 
+              label="Contact Email" 
+              value={settings.companyEmail || ''} 
+              onChange={(e) => setSettings({...settings, companyEmail: e.target.value})}
+              placeholder="hello@example.com"
+            />
+            <Input 
+              label="Phone Number" 
+              value={settings.companyPhone || ''} 
+              onChange={(e) => setSettings({...settings, companyPhone: e.target.value})}
+              placeholder="+1 (555) 000-0000"
+            />
+            <div className={styles.fullWidth}>
+              <Input 
+                label="Office Address" 
+                value={settings.companyAddress || ''} 
+                onChange={(e) => setSettings({...settings, companyAddress: e.target.value})}
+                placeholder="123 Innovation Drive, Tech City, TC 10101"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
             <Share2 size={20} />
             <h2>Social Media Presence</h2>
           </div>

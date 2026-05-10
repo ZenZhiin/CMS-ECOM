@@ -78,6 +78,13 @@ model GlobalSettings {
   footerNavigation Json @default("[]") @map("footer_navigation")
   socialLinks  Json     @default("[]") @map("social_links")
   footerText   String?  @map("footer_text")
+  
+  // Company Details
+  companyName    String?  @map("company_name")
+  companyAddress String?  @map("company_address")
+  companyPhone   String?  @map("company_phone")
+  companyEmail   String?  @map("company_email")
+
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   @@map("global_settings")

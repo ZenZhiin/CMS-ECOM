@@ -49,7 +49,11 @@ async function main() {
       { label: 'Twitter/X', url: 'https://twitter.com', platform: 'twitter' },
       { label: 'YouTube', url: 'https://youtube.com', platform: 'youtube' }
     ],
-    footerText: 'Innovative Digital Solutions for Modern Enterprises.'
+    footerText: 'Innovative Digital Solutions for Modern Enterprises.',
+    companyName: 'Zhiin Digital Studio',
+    companyAddress: '123 Innovation Drive, Tech City, TC 10101',
+    companyPhone: '+1 (555) 000-0000',
+    companyEmail: 'hello@zhiin.digital'
   };
 
   await prisma.globalSettings.upsert({

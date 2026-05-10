@@ -105,13 +105,31 @@
   gap: 60px;
 }
 
-.navGroup h3 {
+.navGroup h3, .companyInfo h3 {
   font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
+}
+
+.infoList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.infoList p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.companyName {
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 
 .navGroup ul {
