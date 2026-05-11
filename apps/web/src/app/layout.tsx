@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 
 import { ToastProvider } from '@/context/ToastContext';
 import { ThemeProvider } from '@/context/ThemeContext';
+import { SettingsProvider } from '@/context/SettingsContext';
 
 export default function RootLayout({
   children,
@@ -19,7 +20,9 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <ToastProvider>
-            {children}
+            <SettingsProvider>
+              {children}
+            </SettingsProvider>
           </ToastProvider>
         </ThemeProvider>
       </body>

@@ -13,9 +13,15 @@ import {
   LogOut,
   Menu,
   X,
-  Key
+  Key,
+  ShoppingBag,
+  ChevronDown,
+  ChevronRight,
+  Package,
+  Layers
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/atoms/ThemeToggle';
+import { useSettings } from '@/context/SettingsContext';
 import styles from './layout.module.css';
 
 export default function DashboardLayout({
@@ -24,8 +30,13 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const { settings } = useSettings();
   const [user, setUser] = useState<any>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
+    cms: true,
+    ecommerce: true
+  });
 
   useEffect(() => {
     const userData = authService.getUser();
@@ -36,15 +47,26 @@ export default function DashboardLayout({
     }
   }, [router]);
 
+  const toggleGroup = (group: string) => {
+    setOpenGroups(prev => ({ ...prev, [group]: !prev[group] }));
+  };
+
   if (!user) return null;
 
-  const navItems = [
+  const cmsItems = [
     { icon: LayoutDashboard, label: 'Overview', href: '/dashboard' },
     { icon: Database, label: 'Content Builder', href: '/dashboard/content-types' },
     { icon: FileText, label: 'Content Manager', href: '/dashboard/content' },
     { icon: ImageIcon, label: 'Media Library', href: '/dashboard/media' },
     { icon: Database, label: 'Navigation', href: '/dashboard/settings/navigation' },
     { icon: FileText, label: 'Forms', href: '/dashboard/forms' },
+  ];
+
+  const ecommerceItems = [
+    { icon: ShoppingBag, label: 'Product Catalog', href: '/dashboard/commerce' },
+  ];
+
+  const standaloneItems = [
     { icon: Users, label: 'Team', href: '/dashboard/team' },
     { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
     { icon: Key, label: 'API Keys', href: '/dashboard/settings/api-keys' },
@@ -60,12 +82,69 @@ export default function DashboardLayout({
         </div>
 
         <nav className={styles.nav}>
-          {navItems.map((item) => (
-            <a key={item.label} href={item.href} className={styles.navItem}>
-              <item.icon size={20} />
-              {isSidebarOpen && <span>{item.label}</span>}
-            </a>
-          ))}
+          {/* CMS Group */}
+          <div className={styles.navGroup}>
+            <button 
+              className={styles.groupHeader} 
+              onClick={() => toggleGroup('cms')}
+            >
+              <div className={styles.groupTitle}>
+                <Layers size={18} />
+                {isSidebarOpen && <span>CMS Core</span>}
+              </div>
+              {isSidebarOpen && (
+                openGroups.cms ? <ChevronDown size={14} /> : <ChevronRight size={14} />
+              )}
+            </button>
+            {openGroups.cms && (
+              <div className={styles.groupItems}>
+                {cmsItems.map((item) => (
+                  <a key={item.label} href={item.href} className={styles.navItem}>
+                    <item.icon size={18} />
+                    {isSidebarOpen && <span>{item.label}</span>}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Ecommerce Group */}
+          {settings?.isEcommerceEnabled && (
+            <div className={styles.navGroup}>
+              <button 
+                className={styles.groupHeader} 
+                onClick={() => toggleGroup('ecommerce')}
+              >
+                <div className={styles.groupTitle}>
+                  <Package size={18} />
+                  {isSidebarOpen && <span>E-commerce</span>}
+                </div>
+                {isSidebarOpen && (
+                  openGroups.ecommerce ? <ChevronDown size={14} /> : <ChevronRight size={14} />
+                )}
+              </button>
+              {openGroups.ecommerce && (
+                <div className={styles.groupItems}>
+                  {ecommerceItems.map((item) => (
+                    <a key={item.label} href={item.href} className={styles.navItem}>
+                      <item.icon size={18} />
+                      {isSidebarOpen && <span>{item.label}</span>}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Standalone Items */}
+          <div className={styles.standaloneItems}>
+            {standaloneItems.map((item) => (
+              <a key={item.label} href={item.href} className={styles.navItem}>
+                <item.icon size={18} />
+                {isSidebarOpen && <span>{item.label}</span>}
+              </a>
+            ))}
+          </div>
         </nav>
 
         <div className={styles.sidebarFooter}>

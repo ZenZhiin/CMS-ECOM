@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../../../node_modules/@prisma/client-main"
 }
 
 datasource db {
@@ -78,6 +79,7 @@ model GlobalSettings {
   footerNavigation Json @default("[]") @map("footer_navigation")
   socialLinks  Json     @default("[]") @map("social_links")
   footerText   String?  @map("footer_text")
+  isEcommerceEnabled Boolean @default(false) @map("is_ecommerce_enabled")
   
   // Company Details
   companyName    String?  @map("company_name")

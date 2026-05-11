@@ -50,6 +50,12 @@
   gap: 24px;
 }
 
+.modulesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
 .fullWidth {
   grid-column: span 2;
 }

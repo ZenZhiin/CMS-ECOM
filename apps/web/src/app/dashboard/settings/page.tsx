@@ -1,22 +1,27 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Save, Globe, Image as ImageIcon, Plus, Trash2, Share2, Upload } from 'lucide-react';
+
+import { Save, Globe, Image as ImageIcon, Plus, Trash2, Share2, Upload, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { Select } from '@/components/atoms/Select';
 import { apiFetch } from '@/lib/api';
 import { useToast } from '@/context/ToastContext';
 import { MediaPickerModal } from '@/components/organisms/MediaPickerModal';
+import { Switch } from '@/components/atoms/Switch';
+import { useSettings } from '@/context/SettingsContext';
 import styles from './page.module.css';
 
 export default function GeneralSettingsPage() {
   const { showToast } = useToast();
+  const { settings: globalSettings, updateToggle } = useSettings();
   const [settings, setSettings] = useState<any>({
     siteName: '',
     siteLogo: '',
     footerText: '',
-    socialLinks: []
+    socialLinks: [],
+    isEcommerceEnabled: false
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -38,6 +43,16 @@ export default function GeneralSettingsPage() {
       console.error('Failed to fetch settings', err);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleToggleEcommerce = async (checked: boolean) => {
+    try {
+      await updateToggle('isEcommerceEnabled', checked);
+      setSettings({ ...settings, isEcommerceEnabled: checked });
+      showToast(`E-commerce module ${checked ? 'enabled' : 'disabled'}`, 'success');
+    } catch (err) {
+      showToast('Failed to update feature state', 'error');
     }
   };
 
@@ -186,6 +201,21 @@ export default function GeneralSettingsPage() {
                 placeholder="123 Innovation Drive, Tech City, TC 10101"
               />
             </div>
+          </div>
+        </div>
+
+        <div className={styles.card}>
+          <div className={styles.cardHeader}>
+            <ShoppingBag size={20} />
+            <h2>Feature Modules</h2>
+          </div>
+          <div className={styles.modulesGrid}>
+            <Switch 
+              label="E-commerce Engine"
+              description="Enable product catalog, inventory management, and checkout functionality."
+              checked={settings.isEcommerceEnabled}
+              onChange={handleToggleEcommerce}
+            />
           </div>
         </div>
 

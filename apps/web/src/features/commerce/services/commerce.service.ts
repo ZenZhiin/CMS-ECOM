@@ -1,0 +1,29 @@
+import { apiFetch } from '@/lib/api';
+
+const COMMERCE_API_URL = process.env.NEXT_PUBLIC_ECOM_URL || 'http://localhost:3002';
+
+export const commerceService = {
+  getProducts: async () => {
+    // In a real scenario, apiFetch might need to be adjusted to handle absolute URLs 
+    // or we use a different wrapper. For now, assuming apiFetch handles it or we use fetch.
+    const response = await fetch(`${COMMERCE_API_URL}/products`);
+    if (!response.ok) throw new Error('Failed to fetch products');
+    return response.json();
+  },
+  
+  getProduct: async (id: string) => {
+    const response = await fetch(`${COMMERCE_API_URL}/products/${id}`);
+    if (!response.ok) throw new Error('Failed to fetch product');
+    return response.json();
+  },
+
+  createProduct: async (data: any) => {
+    const response = await fetch(`${COMMERCE_API_URL}/products`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error('Failed to create product');
+    return response.json();
+  }
+};

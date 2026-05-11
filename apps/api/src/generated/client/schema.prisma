@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+enum Status {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model User {
+  id        String         @id @default(uuid())
+  email     String         @unique
+  password  String
+  name      String?        @map("name")
+  role      Role           @default(VIEWER)
+  entries   ContentEntry[]
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model ContentType {
+  id        String         @id @default(uuid())
+  name      String
+  slug      String         @unique
+  fields    Json           @map("fields") // JSON definition of fields
+  entries   ContentEntry[]
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+
+  @@map("content_types")
+}
+
+model ContentEntry {
+  id            String      @id @default(uuid())
+  contentType   ContentType @relation(fields: [contentTypeId], references: [id])
+  contentTypeId String      @map("content_type_id")
+  author        User        @relation(fields: [authorId], references: [id])
+  authorId      String      @map("author_id")
+  data          Json        @map("data")
+  status        Status      @default(DRAFT)
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  @@map("content_entries")
+}
+
+model Media {
+  id        String   @id @default(uuid())
+  filename  String   @map("filename")
+  path      String   @map("path")
+  mimetype  String   @map("mimetype")
+  size      Int      @map("size")
+  url       String   @map("url")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("media")
+}
+
+model GlobalSettings {
+  id                 String  @id @default("global")
+  siteName           String  @default("Zhiin CMS") @map("site_name")
+  siteLogo           String? @map("site_logo")
+  navigation         Json    @default("[]") @map("navigation")
+  footerNavigation   Json    @default("[]") @map("footer_navigation")
+  socialLinks        Json    @default("[]") @map("social_links")
+  footerText         String? @map("footer_text")
+  isEcommerceEnabled Boolean @default(false) @map("is_ecommerce_enabled")
+
+  // Company Details
+  companyName    String? @map("company_name")
+  companyAddress String? @map("company_address")
+  companyPhone   String? @map("company_phone")
+  companyEmail   String? @map("company_email")
+
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("global_settings")
+}
+
+model ApiKey {
+  id        String   @id @default(uuid())
+  name      String   @map("name")
+  key       String   @unique @map("key")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("api_keys")
+}
+
+model Form {
+  id          String           @id @default(uuid())
+  name        String
+  slug        String           @unique
+  fields      Json             @map("fields") // JSON definition of form fields
+  submissions FormSubmission[]
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  @@map("forms")
+}
+
+model FormSubmission {
+  id        String   @id @default(uuid())
+  form      Form     @relation(fields: [formId], references: [id])
+  formId    String   @map("form_id")
+  data      Json     @map("data") // Captured form data
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("form_submissions")
+}

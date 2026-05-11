@@ -13,6 +13,20 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+  
+  commerce-postgres:
+    image: postgres:15-alpine
+    container_name: commerce-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${COMMERCE_DATABASE_USER:-admin}
+      POSTGRES_PASSWORD: ${COMMERCE_DATABASE_PASSWORD:-admin123}
+      POSTGRES_DB: ${COMMERCE_DATABASE_NAME:-commerce_db}
+    ports:
+      - "5434:5432"
+    volumes:
+      - commerce_postgres_data:/var/lib/postgresql/data
 
 volumes:
   postgres_data:
+  commerce_postgres_data:
