@@ -7,8 +7,8 @@ export declare class ProductsService {
     findAll(): Promise<({
         categories: {
             id: string;
-            name: string;
             slug: string;
+            name: string;
             createdAt: Date;
             updatedAt: Date;
         }[];
@@ -16,16 +16,16 @@ export declare class ProductsService {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            productId: string;
             sku: string;
             price: import("@prisma/client-commerce/runtime/library").Decimal;
             inventory: number;
             attributes: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+            productId: string;
         }[];
     } & {
         id: string;
-        name: string;
         slug: string;
+        name: string;
         description: string | null;
         basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
         isActive: boolean;
@@ -35,8 +35,8 @@ export declare class ProductsService {
     findOne(id: string): Promise<{
         categories: {
             id: string;
-            name: string;
             slug: string;
+            name: string;
             createdAt: Date;
             updatedAt: Date;
         }[];
@@ -44,16 +44,16 @@ export declare class ProductsService {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            productId: string;
             sku: string;
             price: import("@prisma/client-commerce/runtime/library").Decimal;
             inventory: number;
             attributes: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+            productId: string;
         }[];
     } & {
         id: string;
-        name: string;
         slug: string;
+        name: string;
         description: string | null;
         basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
         isActive: boolean;
@@ -65,16 +65,16 @@ export declare class ProductsService {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            productId: string;
             sku: string;
             price: import("@prisma/client-commerce/runtime/library").Decimal;
             inventory: number;
             attributes: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+            productId: string;
         }[];
     } & {
         id: string;
-        name: string;
         slug: string;
+        name: string;
         description: string | null;
         basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
         isActive: boolean;
@@ -83,8 +83,8 @@ export declare class ProductsService {
     }>;
     remove(id: string): Promise<{
         id: string;
-        name: string;
         slug: string;
+        name: string;
         description: string | null;
         basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
         isActive: boolean;
@@ -96,16 +96,16 @@ export declare class ProductsService {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            productId: string;
             sku: string;
             price: import("@prisma/client-commerce/runtime/library").Decimal;
             inventory: number;
             attributes: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+            productId: string;
         }[];
     } & {
         id: string;
-        name: string;
         slug: string;
+        name: string;
         description: string | null;
         basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
         isActive: boolean;

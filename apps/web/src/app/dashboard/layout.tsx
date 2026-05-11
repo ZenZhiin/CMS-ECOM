@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { authService } from '@/features/auth/services/auth.service';
 import {
   LayoutDashboard,
@@ -12,7 +13,7 @@ import {
   Settings,
   LogOut,
   Menu,
-  X,
+  ArrowLeft,
   Key,
   ShoppingBag,
   ChevronDown,
@@ -78,14 +79,14 @@ export default function DashboardLayout({
       <aside className={`${styles.sidebar} ${isSidebarOpen ? '' : styles.collapsed}`}>
         <div className={styles.sidebarHeader}>
           <div className={styles.logo}>Z</div>
-          {isSidebarOpen && <span className="brand-font">Zhiin CMS</span>}
+          {isSidebarOpen && <span className="brand-font">Panel</span>}
         </div>
 
         <nav className={styles.nav}>
           {/* CMS Group */}
           <div className={styles.navGroup}>
-            <button 
-              className={styles.groupHeader} 
+            <button
+              className={styles.groupHeader}
               onClick={() => toggleGroup('cms')}
             >
               <div className={styles.groupTitle}>
@@ -99,10 +100,10 @@ export default function DashboardLayout({
             {openGroups.cms && (
               <div className={styles.groupItems}>
                 {cmsItems.map((item) => (
-                  <a key={item.label} href={item.href} className={styles.navItem}>
+                  <Link key={item.label} href={item.href} className={styles.navItem}>
                     <item.icon size={18} />
                     {isSidebarOpen && <span>{item.label}</span>}
-                  </a>
+                  </Link>
                 ))}
               </div>
             )}
@@ -111,8 +112,8 @@ export default function DashboardLayout({
           {/* Ecommerce Group */}
           {settings?.isEcommerceEnabled && (
             <div className={styles.navGroup}>
-              <button 
-                className={styles.groupHeader} 
+              <button
+                className={styles.groupHeader}
                 onClick={() => toggleGroup('ecommerce')}
               >
                 <div className={styles.groupTitle}>
@@ -126,23 +127,22 @@ export default function DashboardLayout({
               {openGroups.ecommerce && (
                 <div className={styles.groupItems}>
                   {ecommerceItems.map((item) => (
-                    <a key={item.label} href={item.href} className={styles.navItem}>
+                    <Link key={item.label} href={item.href} className={styles.navItem}>
                       <item.icon size={18} />
                       {isSidebarOpen && <span>{item.label}</span>}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               )}
             </div>
           )}
 
-          {/* Standalone Items */}
           <div className={styles.standaloneItems}>
             {standaloneItems.map((item) => (
-              <a key={item.label} href={item.href} className={styles.navItem}>
+              <Link key={item.label} href={item.href} className={styles.navItem}>
                 <item.icon size={18} />
                 {isSidebarOpen && <span>{item.label}</span>}
-              </a>
+              </Link>
             ))}
           </div>
         </nav>
@@ -159,7 +159,7 @@ export default function DashboardLayout({
       <main className={styles.main}>
         <header className={styles.header}>
           <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className={styles.toggleBtn}>
-            {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+            {isSidebarOpen ? <ArrowLeft size={20} /> : <Menu size={20} />}
           </button>
 
           <div className={styles.headerActions}>

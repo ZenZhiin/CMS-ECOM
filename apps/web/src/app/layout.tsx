@@ -1,27 +1,33 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
-
-export const metadata: Metadata = {
-  title: "Zhiin CMS | Admin Portal",
-  description: "Next-generation content management system",
-};
 
 import { ToastProvider } from '@/context/ToastContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { SettingsProvider } from '@/context/SettingsContext';
+import { CommerceProvider } from '@/context/CommerceContext';
+
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata: Metadata = {
+  title: 'Zhiin CMS | Modern Content Architecture',
+  description: 'A professional-grade CMS for modern enterprises.',
+};
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body>
+      <body className={inter.className}>
         <ThemeProvider>
           <ToastProvider>
             <SettingsProvider>
-              {children}
+              <CommerceProvider>
+                {children}
+              </CommerceProvider>
             </SettingsProvider>
           </ToastProvider>
         </ThemeProvider>
