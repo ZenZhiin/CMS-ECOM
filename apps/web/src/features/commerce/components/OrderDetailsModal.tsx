@@ -58,11 +58,11 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
   if (!order) return null;
 
   return (
-    <Modal 
-      isOpen={isOpen} 
+    <Modal
+      isOpen={isOpen}
       onClose={onClose}
       title={`Order #${order.orderNumber}`}
-      size="large"
+      size="lg"
     >
       <div className={styles.container}>
         <div className={styles.main}>
@@ -113,8 +113,8 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
             <h3>Manage Shipping</h3>
             <div className={styles.formGroup}>
               <label>Order Status</label>
-              <Select 
-                value={status} 
+              <Select
+                value={status}
                 onChange={(e) => setStatus(e.target.value)}
                 options={[
                   { label: 'Pending', value: 'PENDING' },
@@ -128,22 +128,22 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
             </div>
             <div className={styles.formGroup}>
               <label>Shipping Carrier</label>
-              <Input 
-                placeholder="e.g. FedEx, DHL, PosLaju" 
+              <Input
+                placeholder="e.g. FedEx, DHL, PosLaju"
                 value={carrier}
                 onChange={(e) => setCarrier(e.target.value)}
               />
             </div>
             <div className={styles.formGroup}>
               <label>Tracking Number</label>
-              <Input 
-                placeholder="Paste tracking ID..." 
+              <Input
+                placeholder="Paste tracking ID..."
                 value={tracking}
                 onChange={(e) => setTracking(e.target.value)}
               />
             </div>
-            <Button 
-              className={styles.saveBtn} 
+            <Button
+              className={styles.saveBtn}
               onClick={handleUpdate}
               disabled={isSubmitting}
             >
