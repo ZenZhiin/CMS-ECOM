@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { X, Truck, Package, CreditCard, User, MapPin, ExternalLink } from 'lucide-react';
-import { Modal } from '@/components/molecules/Modal';
+import { Modal } from '@/components/atoms/Modal';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { Select } from '@/components/atoms/Select';

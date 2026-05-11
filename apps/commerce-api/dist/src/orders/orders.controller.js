@@ -29,6 +29,12 @@ let OrdersController = class OrdersController {
     update(id, data) {
         return this.ordersService.update(id, data);
     }
+    createPaymentIntent(data) {
+        return this.ordersService.createPaymentIntent(data);
+    }
+    createOrder(data) {
+        return this.ordersService.createOrder(data);
+    }
 };
 exports.OrdersController = OrdersController;
 __decorate([
@@ -52,6 +58,20 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "update", null);
+__decorate([
+    Post('create-payment-intent'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], OrdersController.prototype, "createPaymentIntent", null);
+__decorate([
+    Post(),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], OrdersController.prototype, "createOrder", null);
 exports.OrdersController = OrdersController = __decorate([
     (0, common_1.Controller)('orders'),
     __metadata("design:paramtypes", [orders_service_1.OrdersService])

@@ -87,5 +87,25 @@ export const commerceService = {
     });
     if (!response.ok) throw new Error('Failed to update order');
     return response.json();
+  },
+
+  createPaymentIntent: async (data: { amount: number; currency: string }) => {
+    const response = await fetch(`${COMMERCE_API_URL}/orders/create-payment-intent`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error('Failed to create payment intent');
+    return response.json();
+  },
+
+  createOrder: async (data: any) => {
+    const response = await fetch(`${COMMERCE_API_URL}/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error('Failed to create order');
+    return response.json();
   }
 };

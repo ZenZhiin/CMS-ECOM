@@ -19,4 +19,14 @@ export class OrdersController {
   update(@Param('id') id: string, @Body() data: any) {
     return this.ordersService.update(id, data);
   }
+
+  @Post('create-payment-intent')
+  createPaymentIntent(@Body() data: { amount: number; currency: string }) {
+    return this.ordersService.createPaymentIntent(data);
+  }
+
+  @Post()
+  createOrder(@Body() data: any) {
+    return this.ordersService.createOrder(data);
+  }
 }
