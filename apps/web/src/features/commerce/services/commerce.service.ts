@@ -43,5 +43,26 @@ export const commerceService = {
     });
     if (!response.ok) throw new Error('Failed to delete product');
     return response.json();
+  },
+
+  // Customer Auth
+  registerCustomer: async (data: any) => {
+    const response = await fetch(`${COMMERCE_API_URL}/customers/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error('Failed to register');
+    return response.json();
+  },
+
+  loginCustomer: async (data: any) => {
+    const response = await fetch(`${COMMERCE_API_URL}/customers/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error('Invalid credentials');
+    return response.json();
   }
 };

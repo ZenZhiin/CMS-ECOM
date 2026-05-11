@@ -49,6 +49,7 @@ export class ProductsService {
         slug: dto.slug,
         description: dto.description,
         basePrice: dto.basePrice,
+        type: dto.type || 'PHYSICAL',
         isActive: dto.isActive,
         variants: {
           create: dto.variants,
@@ -56,6 +57,8 @@ export class ProductsService {
         categories: {
           connect: dto.categoryIds?.map((id) => ({ id })) || [],
         },
+        metadata: dto.metadata || {},
+        digitalData: dto.digitalData || {},
       },
       include: {
         variants: true,
@@ -79,7 +82,10 @@ export class ProductsService {
         slug: dto.slug,
         description: dto.description,
         basePrice: dto.basePrice,
+        type: dto.type,
         isActive: dto.isActive,
+        metadata: dto.metadata,
+        digitalData: dto.digitalData,
         variants: {
           deleteMany: {},
           create: dto.variants,

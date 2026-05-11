@@ -25,6 +25,10 @@
   align-items: center;
 }
 
+.typeSelector {
+  min-width: 180px;
+}
+
 .row {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from '@/components/atoms/Modal';
 import { Input } from '@/components/atoms/Input';
 import { Button } from '@/components/atoms/Button';
-import { Plus, Trash2, Package } from 'lucide-react';
+import { Select } from '@/components/atoms/Select';
+import { Plus, Trash2, Package, Globe, FileText, Repeat } from 'lucide-react';
 import styles from './ProductModal.module.css';
 
 interface ProductModalProps {
@@ -24,9 +25,12 @@ export const ProductModal: React.FC<ProductModalProps> = ({
     name: '',
     slug: '',
     description: '',
+    type: 'PHYSICAL',
     basePrice: '',
     isActive: true,
-    variants: [{ sku: '', price: '', inventory: 0, attributes: {} }]
+    variants: [{ sku: '', price: '', inventory: 0, attributes: {} }],
+    digitalData: { fileUrl: '', expiry: '' },
+    metadata: { weight: '', dimensions: '' }
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,16 +43,21 @@ export const ProductModal: React.FC<ProductModalProps> = ({
         variants: initialData.variants.map((v: any) => ({
           ...v,
           price: v.price.toString()
-        }))
+        })),
+        digitalData: initialData.digitalData || { fileUrl: '', expiry: '' },
+        metadata: initialData.metadata || { weight: '', dimensions: '' }
       });
     } else {
       setFormData({
         name: '',
         slug: '',
         description: '',
+        type: 'PHYSICAL',
         basePrice: '',
         isActive: true,
-        variants: [{ sku: '', price: '', inventory: 0, attributes: {} }]
+        variants: [{ sku: '', price: '', inventory: 0, attributes: {} }],
+        digitalData: { fileUrl: '', expiry: '' },
+        metadata: { weight: '', dimensions: '' }
       });
     }
   }, [initialData, isOpen]);
@@ -103,7 +112,21 @@ export const ProductModal: React.FC<ProductModalProps> = ({
     >
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.section}>
-          <h3>Basic Information</h3>
+          <div className={styles.sectionHeader}>
+            <h3>Basic Information</h3>
+            <div className={styles.typeSelector}>
+              <Select 
+                value={formData.type}
+                onChange={(e) => setFormData({...formData, type: e.target.value})}
+                options={[
+                  { label: 'Physical Product', value: 'PHYSICAL' },
+                  { label: 'Digital Product', value: 'DIGITAL' },
+                  { label: 'Subscription', value: 'SUBSCRIPTION' }
+                ]}
+              />
+            </div>
+          </div>
+          
           <div className={styles.row}>
             <Input 
               label="Product Name" 
@@ -140,6 +163,63 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           </div>
         </div>
 
+        {/* Dynamic Section Based on Type */}
+        {formData.type === 'DIGITAL' && (
+          <div className={styles.section}>
+            <h3>Digital Delivery</h3>
+            <div className={styles.row}>
+              <Input 
+                label="File URL / Download Link" 
+                value={formData.digitalData.fileUrl}
+                onChange={(e) => setFormData({
+                  ...formData, 
+                  digitalData: { ...formData.digitalData, fileUrl: e.target.value }
+                })}
+                placeholder="https://storage.zhiin.com/file.zip"
+                required
+              />
+              <Input 
+                label="Link Expiry (Hours)" 
+                type="number"
+                value={formData.digitalData.expiry}
+                onChange={(e) => setFormData({
+                  ...formData, 
+                  digitalData: { ...formData.digitalData, expiry: e.target.value }
+                })}
+                placeholder="24"
+              />
+            </div>
+          </div>
+        )}
+
+        {formData.type === 'PHYSICAL' && (
+          <div className={styles.section}>
+            <h3>Shipping Metadata</h3>
+            <div className={styles.row}>
+              <Input 
+                label="Weight (kg)" 
+                type="number"
+                step="0.1"
+                value={formData.metadata.weight}
+                onChange={(e) => setFormData({
+                  ...formData, 
+                  metadata: { ...formData.metadata, weight: e.target.value }
+                })}
+                placeholder="0.5"
+              />
+              <Input 
+                label="Dimensions (cm)" 
+                value={formData.metadata.dimensions}
+                onChange={(e) => setFormData({
+                  ...formData, 
+                  metadata: { ...formData.metadata, dimensions: e.target.value }
+                })}
+                placeholder="20x15x10"
+              />
+            </div>
+          </div>
+        )}
+
         <div className={styles.section}>
           <div className={styles.sectionHeader}>
             <h3>Variants</h3>
@@ -167,14 +247,16 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                   placeholder="0.00"
                   required
                 />
-                <Input 
-                  label="Inventory" 
-                  type="number"
-                  value={variant.inventory}
-                  onChange={(e) => handleVariantChange(index, 'inventory', e.target.value)}
-                  placeholder="0"
-                  required
-                />
+                {formData.type === 'PHYSICAL' && (
+                  <Input 
+                    label="Inventory" 
+                    type="number"
+                    value={variant.inventory}
+                    onChange={(e) => handleVariantChange(index, 'inventory', e.target.value)}
+                    placeholder="0"
+                    required
+                  />
+                )}
                 <button 
                   type="button" 
                   className={styles.deleteBtn}
