@@ -1,12 +1,16 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { MailService } from '../mail/mail.service';
 import Stripe from 'stripe';
 
 @Injectable()
 export class OrdersService {
   private stripe: Stripe;
 
-  constructor(private prisma: PrismaService) {
+  constructor(
+    private prisma: PrismaService,
+    private mailService: MailService
+  ) {
     // We'll initialize stripe in a method to use settings from DB
   }
 
@@ -83,7 +87,7 @@ export class OrdersService {
     // Generate unique order number
     const orderNumber = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-    return this.prisma.order.create({
+    const order = await this.prisma.order.create({
       data: {
         orderNumber,
         customerId: data.customerId,
@@ -101,9 +105,36 @@ export class OrdersService {
         }
       },
       include: {
-        items: true
+        customer: true,
+        items: {
+          include: {
+            variant: {
+              include: {
+                product: true
+              }
+            }
+          }
+        }
       }
     });
+
+    // 1. Send General Order Confirmation
+    await this.mailService.sendOrderConfirmation(order);
+
+    // 2. Check for Digital Products and Send Delivery Email
+    const digitalItems = order.items
+      .filter((item: any) => item.variant.product.type === 'DIGITAL')
+      .map((item: any) => ({
+        productName: item.variant.product.name,
+        fileUrl: item.variant.product.digitalData?.fileUrl,
+        expiry: item.variant.product.digitalData?.expiry
+      }));
+
+    if (digitalItems.length > 0) {
+      await this.mailService.sendDigitalDelivery(order, digitalItems);
+    }
+
+    return order;
   }
 
   async update(id: string, data: any) {

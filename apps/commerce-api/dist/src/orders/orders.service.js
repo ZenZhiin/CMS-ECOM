@@ -15,12 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrdersService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const mail_service_1 = require("../mail/mail.service");
 const stripe_1 = __importDefault(require("stripe"));
 let OrdersService = class OrdersService {
     prisma;
+    mailService;
     stripe;
-    constructor(prisma) {
+    constructor(prisma, mailService) {
         this.prisma = prisma;
+        this.mailService = mailService;
     }
     async getStripeClient() {
         const secretKey = process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder';
@@ -88,7 +91,7 @@ let OrdersService = class OrdersService {
     }
     async createOrder(data) {
         const orderNumber = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-        return this.prisma.order.create({
+        const order = await this.prisma.order.create({
             data: {
                 orderNumber,
                 customerId: data.customerId,
@@ -106,9 +109,30 @@ let OrdersService = class OrdersService {
                 }
             },
             include: {
-                items: true
+                customer: true,
+                items: {
+                    include: {
+                        variant: {
+                            include: {
+                                product: true
+                            }
+                        }
+                    }
+                }
             }
         });
+        await this.mailService.sendOrderConfirmation(order);
+        const digitalItems = order.items
+            .filter((item) => item.variant.product.type === 'DIGITAL')
+            .map((item) => ({
+            productName: item.variant.product.name,
+            fileUrl: item.variant.product.digitalData?.fileUrl,
+            expiry: item.variant.product.digitalData?.expiry
+        }));
+        if (digitalItems.length > 0) {
+            await this.mailService.sendDigitalDelivery(order, digitalItems);
+        }
+        return order;
     }
     async update(id, data) {
         const order = await this.findOne(id);
@@ -125,6 +149,7 @@ let OrdersService = class OrdersService {
 exports.OrdersService = OrdersService;
 exports.OrdersService = OrdersService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        mail_service_1.MailService])
 ], OrdersService);
 //# sourceMappingURL=orders.service.js.map
