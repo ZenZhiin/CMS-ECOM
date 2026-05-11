@@ -106,7 +106,10 @@ let ProductsService = ProductsService_1 = class ProductsService {
                 images: dto.images,
                 variants: {
                     deleteMany: {},
-                    create: dto.variants,
+                    create: dto.variants?.map((v) => {
+                        const { id, productId, createdAt, updatedAt, ...rest } = v;
+                        return rest;
+                    }),
                 },
             },
             include: {

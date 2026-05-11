@@ -27,7 +27,11 @@ export default async function PublicLayout({
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <SiteHeader siteName={settings.siteName} navigation={settings.navigation} />
+      <SiteHeader 
+        siteName={settings.siteName} 
+        siteLogo={settings.siteLogo}
+        navigation={settings.navigation} 
+      />
       <div style={{ flex: 1, paddingTop: '72px' }}>
         {children}
       </div>

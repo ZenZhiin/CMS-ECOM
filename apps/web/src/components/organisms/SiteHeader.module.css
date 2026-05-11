@@ -191,3 +191,9 @@
     display: none;
   }
 }
+
+.siteLogo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}

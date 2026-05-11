@@ -16,6 +16,7 @@ interface NavItem {
 
 interface SiteHeaderProps {
   siteName: string;
+  siteLogo?: string | null;
   navigation: NavItem[];
 }
 
@@ -24,7 +25,7 @@ const NavLink: React.FC<{ item: NavItem; level?: number }> = ({ item, level = 0 
   const hasChildren = item.children && item.children.length > 0;
 
   return (
-    <div 
+    <div
       className={`${styles.navItem} ${hasChildren ? styles.hasDropdown : ''}`}
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
@@ -45,17 +46,21 @@ const NavLink: React.FC<{ item: NavItem; level?: number }> = ({ item, level = 0 
   );
 };
 
-export const SiteHeader: React.FC<SiteHeaderProps> = ({ siteName, navigation }) => {
+export const SiteHeader: React.FC<SiteHeaderProps> = ({ siteName, siteLogo, navigation }) => {
   const { settings } = useSettings();
   const { cartCount, isCustomerLoggedIn } = useCommerce();
-  
+
   const isEcomEnabled = settings?.isEcommerceEnabled;
 
   return (
     <header className={styles.header}>
       <div className={styles.container}>
         <Link href="/" className={styles.brand}>
-          <div className={styles.logo}>Z</div>
+          {siteLogo ? (
+            <img src={siteLogo} alt={siteName} className={styles.siteLogo} />
+          ) : (
+            <div className={styles.logo}>{siteName.charAt(0).toUpperCase()}</div>
+          )}
           <span className="brand-font">{siteName}</span>
         </Link>
 
@@ -68,10 +73,10 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({ siteName, navigation }) 
               <NavLink item={{ label: 'Shop', url: '/shop' }} />
             )}
           </nav>
-          
+
           <div className={styles.actions}>
             <ThemeToggle />
-            
+
             {isEcomEnabled && (
               <div className={styles.commerceActions}>
                 <Link href="/cart" className={styles.iconBtn}>
