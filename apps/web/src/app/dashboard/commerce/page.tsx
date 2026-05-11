@@ -1,16 +1,18 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { ShoppingBag, Plus, Search, Filter, Package } from 'lucide-react';
+import { ShoppingBag, Plus, Search, Filter, Package, Edit2, Trash2 } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
-import { Input } from '@/components/atoms/Input';
 import { commerceService } from '@/features/commerce/services/commerce.service';
+import { ProductModal } from '@/features/commerce/components/ProductModal';
 import styles from './page.module.css';
 
 export default function CommerceDashboardPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<any>(null);
 
   useEffect(() => {
     fetchProducts();
@@ -27,6 +29,33 @@ export default function CommerceDashboardPage() {
     }
   };
 
+  const handleSaveProduct = async (data: any) => {
+    if (editingProduct) {
+      await commerceService.updateProduct(editingProduct.id, data);
+    } else {
+      await commerceService.createProduct(data);
+    }
+    await fetchProducts();
+    setIsModalOpen(false);
+    setEditingProduct(null);
+  };
+
+  const handleDeleteProduct = async (id: string) => {
+    if (confirm('Are you sure you want to delete this product?')) {
+      try {
+        await commerceService.deleteProduct(id);
+        await fetchProducts();
+      } catch (err) {
+        console.error('Failed to delete product', err);
+      }
+    }
+  };
+
+  const openEditModal = (product: any) => {
+    setEditingProduct(product);
+    setIsModalOpen(true);
+  };
+
   const filteredProducts = products.filter(p => 
     p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
     p.slug.toLowerCase().includes(searchTerm.toLowerCase())
@@ -39,7 +68,7 @@ export default function CommerceDashboardPage() {
           <h1 className="brand-font">Product Catalog</h1>
           <p>Manage your store's products, inventory, and pricing.</p>
         </div>
-        <Button onClick={() => {}}>
+        <Button onClick={() => { setEditingProduct(null); setIsModalOpen(true); }}>
           <Plus size={18} />
           Add New Product
         </Button>
@@ -69,7 +98,17 @@ export default function CommerceDashboardPage() {
           {filteredProducts.map((product) => (
             <div key={product.id} className={styles.productCard}>
               <div className={styles.productInfo}>
-                <h3>{product.name}</h3>
+                <div className={styles.cardHeader}>
+                  <h3>{product.name}</h3>
+                  <div className={styles.actions}>
+                    <button className={styles.iconBtn} onClick={() => openEditModal(product)}>
+                      <Edit2 size={16} />
+                    </button>
+                    <button className={styles.iconBtnDelete} onClick={() => handleDeleteProduct(product.id)}>
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
                 <span className={styles.slug}>{product.slug}</span>
                 <div className={styles.priceRow}>
                   <span className={styles.label}>Base Price</span>
@@ -93,9 +132,16 @@ export default function CommerceDashboardPage() {
           <ShoppingBag size={48} />
           <h3>No products found</h3>
           <p>Start by adding your first product to the catalog.</p>
-          <Button variant="secondary" onClick={() => {}}>Create Product</Button>
+          <Button variant="secondary" onClick={() => { setEditingProduct(null); setIsModalOpen(true); }}>Create Product</Button>
         </div>
       )}
+
+      <ProductModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSave={handleSaveProduct}
+        initialData={editingProduct}
+      />
     </div>
   );
 }

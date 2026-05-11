@@ -77,7 +77,40 @@
 
 .productInfo h3 {
   font-size: 18px;
+  margin: 0;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 4px;
+}
+
+.actions {
+  display: flex;
+  gap: 4px;
+}
+
+.iconBtn, .iconBtnDelete {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  display: flex;
+}
+
+.iconBtn:hover {
+  background: var(--bg-tertiary);
+  color: var(--primary-color);
+}
+
+.iconBtnDelete:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
 }
 
 .slug {

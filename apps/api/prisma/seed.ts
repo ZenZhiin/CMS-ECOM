@@ -34,7 +34,6 @@ async function main() {
   const globalSettingsData = {
     siteName: 'Zhiin Digital',
     navigation: [
-      { label: 'Home', url: '/' },
       { label: 'About Us', url: '/about' },
       { label: 'Contact', url: '/contact' }
     ],
@@ -66,7 +65,7 @@ async function main() {
   });
 
   // 3. Create Page-Specific Content Types (Individual Schemas)
-  
+
   // Home Page Model
   const homeType = await prisma.contentType.upsert({
     where: { slug: 'home' },
@@ -132,7 +131,7 @@ async function main() {
   });
 
   // 5. Create Entries for each specific model
-  
+
   // Home Entry
   await prisma.contentEntry.create({
     data: {

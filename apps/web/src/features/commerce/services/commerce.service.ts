@@ -25,5 +25,23 @@ export const commerceService = {
     });
     if (!response.ok) throw new Error('Failed to create product');
     return response.json();
+  },
+
+  updateProduct: async (id: string, data: any) => {
+    const response = await fetch(`${COMMERCE_API_URL}/products/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error('Failed to update product');
+    return response.json();
+  },
+
+  deleteProduct: async (id: string) => {
+    const response = await fetch(`${COMMERCE_API_URL}/products/${id}`, {
+      method: 'DELETE'
+    });
+    if (!response.ok) throw new Error('Failed to delete product');
+    return response.json();
   }
 };

@@ -1,12 +1,15 @@
-import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 
 @Injectable()
 export class ProductsService {
+  private readonly logger = new Logger(ProductsService.name);
+
   constructor(private prisma: PrismaService) {}
 
   async findAll() {
+    this.logger.log('Fetching all products');
     return this.prisma.product.findMany({
       include: {
         variants: true,
@@ -64,6 +67,27 @@ export class ProductsService {
     await this.findOne(id); // Ensure it exists
     return this.prisma.product.delete({
       where: { id },
+    });
+  }
+
+  async update(id: string, dto: any) {
+    await this.findOne(id);
+    return this.prisma.product.update({
+      where: { id },
+      data: {
+        name: dto.name,
+        slug: dto.slug,
+        description: dto.description,
+        basePrice: dto.basePrice,
+        isActive: dto.isActive,
+        variants: {
+          deleteMany: {},
+          create: dto.variants,
+        },
+      },
+      include: {
+        variants: true,
+      },
     });
   }
 }

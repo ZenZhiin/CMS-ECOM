@@ -8,16 +8,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var ProductsService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
-let ProductsService = class ProductsService {
+let ProductsService = ProductsService_1 = class ProductsService {
     prisma;
+    logger = new common_1.Logger(ProductsService_1.name);
     constructor(prisma) {
         this.prisma = prisma;
     }
     async findAll() {
+        this.logger.log('Fetching all products');
         return this.prisma.product.findMany({
             include: {
                 variants: true,
@@ -70,9 +73,29 @@ let ProductsService = class ProductsService {
             where: { id },
         });
     }
+    async update(id, dto) {
+        await this.findOne(id);
+        return this.prisma.product.update({
+            where: { id },
+            data: {
+                name: dto.name,
+                slug: dto.slug,
+                description: dto.description,
+                basePrice: dto.basePrice,
+                isActive: dto.isActive,
+                variants: {
+                    deleteMany: {},
+                    create: dto.variants,
+                },
+            },
+            include: {
+                variants: true,
+            },
+        });
+    }
 };
 exports.ProductsService = ProductsService;
-exports.ProductsService = ProductsService = __decorate([
+exports.ProductsService = ProductsService = ProductsService_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], ProductsService);

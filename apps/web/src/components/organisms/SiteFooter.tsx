@@ -49,7 +49,7 @@ interface SiteFooterProps {
 }
 
 export const SiteFooter: React.FC<SiteFooterProps> = ({
-  siteName = 'Zhiin Digital',
+  siteName = '',
   footerNavigation = [],
   socialLinks = [],
   footerText = '',
