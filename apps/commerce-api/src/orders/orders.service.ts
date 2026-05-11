@@ -12,6 +12,7 @@ export class OrdersService {
 
   private async getStripeClient() {
     const secretKey = process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder';
+    // Use the class exported from the Stripe namespace/default
     return new Stripe(secretKey, {
       apiVersion: '2025-01-27' as any,
     });

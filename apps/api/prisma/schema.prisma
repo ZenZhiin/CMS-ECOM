@@ -9,8 +9,11 @@ datasource db {
 }
 
 enum Role {
+  SUPER_ADMIN
   ADMIN
-  EDITOR
+  CMS_EDITOR
+  COMMERCE_ADMIN
+  ORDER_MANAGER
   VIEWER
 }
 
