@@ -59,14 +59,14 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "update", null);
 __decorate([
-    Post('create-payment-intent'),
+    (0, common_1.Post)('create-payment-intent'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], OrdersController.prototype, "createPaymentIntent", null);
 __decorate([
-    Post(),
+    (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

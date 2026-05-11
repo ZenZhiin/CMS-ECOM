@@ -15,8 +15,6 @@ export class OrdersService {
   }
 
   private async getStripeClient() {
-    // In a real app, you'd fetch this from the settings table
-    // For now, we'll check process.env or just use a placeholder
     const secretKey = process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder';
     return new Stripe(secretKey, {
       apiVersion: '2025-01-27' as any,
@@ -84,14 +82,13 @@ export class OrdersService {
   }
 
   async createOrder(data: any) {
-    // Generate unique order number
     const orderNumber = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
     const order = await this.prisma.order.create({
       data: {
         orderNumber,
         customerId: data.customerId,
-        status: 'PAID', // Assuming payment succeeded before this call
+        status: 'PAID',
         totalAmount: data.totalAmount,
         shippingAddress: data.shippingAddress,
         billingAddress: data.billingAddress || data.shippingAddress,

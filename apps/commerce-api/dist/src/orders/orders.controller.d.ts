@@ -19,6 +19,7 @@ export declare class OrdersController {
                     description: string | null;
                     type: import("@prisma/client-commerce/client").$Enums.ProductType;
                     basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
+                    images: string[];
                     digitalData: import("@prisma/client-commerce/runtime/library").JsonValue | null;
                     metadata: import("@prisma/client-commerce/runtime/library").JsonValue | null;
                     isActive: boolean;
@@ -48,6 +49,8 @@ export declare class OrdersController {
         totalAmount: import("@prisma/client-commerce/runtime/library").Decimal;
         shippingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         billingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+        shippingCarrier: string | null;
+        trackingNumber: string | null;
         paymentIntentId: string | null;
         createdAt: Date;
         updatedAt: Date;
@@ -74,6 +77,7 @@ export declare class OrdersController {
                     description: string | null;
                     type: import("@prisma/client-commerce/client").$Enums.ProductType;
                     basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
+                    images: string[];
                     digitalData: import("@prisma/client-commerce/runtime/library").JsonValue | null;
                     metadata: import("@prisma/client-commerce/runtime/library").JsonValue | null;
                     isActive: boolean;
@@ -103,6 +107,8 @@ export declare class OrdersController {
         totalAmount: import("@prisma/client-commerce/runtime/library").Decimal;
         shippingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         billingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+        shippingCarrier: string | null;
+        trackingNumber: string | null;
         paymentIntentId: string | null;
         createdAt: Date;
         updatedAt: Date;
@@ -115,6 +121,8 @@ export declare class OrdersController {
         totalAmount: import("@prisma/client-commerce/runtime/library").Decimal;
         shippingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         billingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+        shippingCarrier: string | null;
+        trackingNumber: string | null;
         paymentIntentId: string | null;
         createdAt: Date;
         updatedAt: Date;
@@ -147,6 +155,7 @@ export declare class OrdersController {
                     description: string | null;
                     type: import("@prisma/client-commerce/client").$Enums.ProductType;
                     basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
+                    images: string[];
                     digitalData: import("@prisma/client-commerce/runtime/library").JsonValue | null;
                     metadata: import("@prisma/client-commerce/runtime/library").JsonValue | null;
                     isActive: boolean;
@@ -176,6 +185,8 @@ export declare class OrdersController {
         totalAmount: import("@prisma/client-commerce/runtime/library").Decimal;
         shippingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         billingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+        shippingCarrier: string | null;
+        trackingNumber: string | null;
         paymentIntentId: string | null;
         createdAt: Date;
         updatedAt: Date;
