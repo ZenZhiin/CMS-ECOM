@@ -20,29 +20,56 @@ interface CommerceContextType {
   clearCart: () => void;
   cartTotal: number;
   cartCount: number;
+  
+  // Customer Auth
+  customer: any | null;
+  loginCustomer: (data: any) => Promise<void>;
+  logoutCustomer: () => void;
+  isCustomerLoggedIn: boolean;
 }
 
 const CommerceContext = createContext<CommerceContextType | undefined>(undefined);
 
 export const CommerceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [customer, setCustomer] = useState<any | null>(null);
 
-  // Load cart from localStorage on mount
+  // Load state from localStorage on mount
   useEffect(() => {
     const savedCart = localStorage.getItem('zhiin_cart');
+    const savedCustomer = localStorage.getItem('zhiin_customer');
+    
     if (savedCart) {
-      try {
-        setCart(JSON.parse(savedCart));
-      } catch (e) {
-        console.error('Failed to parse cart', e);
-      }
+      try { setCart(JSON.parse(savedCart)); } catch (e) {}
+    }
+    if (savedCustomer) {
+      try { setCustomer(JSON.parse(savedCustomer)); } catch (e) {}
     }
   }, []);
 
-  // Save cart to localStorage on change
+  // Save state to localStorage on change
   useEffect(() => {
     localStorage.setItem('zhiin_cart', JSON.stringify(cart));
   }, [cart]);
+
+  useEffect(() => {
+    if (customer) {
+      localStorage.setItem('zhiin_customer', JSON.stringify(customer));
+    } else {
+      localStorage.removeItem('zhiin_customer');
+    }
+  }, [customer]);
+
+  const loginCustomer = async (data: any) => {
+    const result = await commerceService.loginCustomer(data);
+    setCustomer(result.customer);
+    localStorage.setItem('zhiin_customer_token', result.accessToken);
+  };
+
+  const logoutCustomer = () => {
+    setCustomer(null);
+    localStorage.removeItem('zhiin_customer_token');
+  };
 
   const addToCart = (item: CartItem) => {
     setCart(prev => {
@@ -85,7 +112,11 @@ export const CommerceProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       updateQuantity, 
       clearCart,
       cartTotal,
-      cartCount
+      cartCount,
+      customer,
+      loginCustomer,
+      logoutCustomer,
+      isCustomerLoggedIn: !!customer
     }}>
       {children}
     </CommerceContext.Provider>

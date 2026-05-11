@@ -4,12 +4,12 @@ export declare class CustomersController {
     constructor(customersService: CustomersService);
     register(dto: any): Promise<{
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
         email: string;
         firstName: string | null;
         lastName: string | null;
         phone: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     login(dto: any): Promise<{
         accessToken: string;
@@ -52,11 +52,11 @@ export declare class CustomersController {
             endDate: Date | null;
         }[];
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
         email: string;
         firstName: string | null;
         lastName: string | null;
         phone: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
 }

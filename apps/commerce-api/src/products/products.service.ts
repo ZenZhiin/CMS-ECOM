@@ -59,6 +59,7 @@ export class ProductsService {
         },
         metadata: dto.metadata || {},
         digitalData: dto.digitalData || {},
+        images: dto.images || [],
       },
       include: {
         variants: true,
@@ -86,6 +87,7 @@ export class ProductsService {
         isActive: dto.isActive,
         metadata: dto.metadata,
         digitalData: dto.digitalData,
+        images: dto.images,
         variants: {
           deleteMany: {},
           create: dto.variants,

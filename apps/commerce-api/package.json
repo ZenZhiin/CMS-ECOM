@@ -17,6 +17,7 @@
     "test": "jest",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
+    "db:reset": "prisma migrate reset --force",
     "db:seed": "prisma db seed",
     "db:gen": "prisma generate",
     "test:watch": "jest --watch",

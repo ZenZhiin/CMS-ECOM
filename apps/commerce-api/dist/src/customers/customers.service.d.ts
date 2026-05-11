@@ -6,12 +6,12 @@ export declare class CustomersService {
     constructor(prisma: PrismaService, jwtService: JwtService);
     register(dto: any): Promise<{
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
         email: string;
         firstName: string | null;
         lastName: string | null;
         phone: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     login(dto: any): Promise<{
         accessToken: string;
@@ -54,11 +54,11 @@ export declare class CustomersService {
             endDate: Date | null;
         }[];
         id: string;
+        createdAt: Date;
+        updatedAt: Date;
         email: string;
         firstName: string | null;
         lastName: string | null;
         phone: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
 }

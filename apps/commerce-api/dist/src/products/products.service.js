@@ -64,6 +64,7 @@ let ProductsService = ProductsService_1 = class ProductsService {
                 },
                 metadata: dto.metadata || {},
                 digitalData: dto.digitalData || {},
+                images: dto.images || [],
             },
             include: {
                 variants: true,
@@ -89,6 +90,7 @@ let ProductsService = ProductsService_1 = class ProductsService {
                 isActive: dto.isActive,
                 metadata: dto.metadata,
                 digitalData: dto.digitalData,
+                images: dto.images,
                 variants: {
                     deleteMany: {},
                     create: dto.variants,

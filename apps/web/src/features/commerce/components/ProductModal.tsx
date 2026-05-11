@@ -30,7 +30,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({
     isActive: true,
     variants: [{ sku: '', price: '', inventory: 0, attributes: {} }],
     digitalData: { fileUrl: '', expiry: '' },
-    metadata: { weight: '', dimensions: '' }
+    metadata: { weight: '', dimensions: '' },
+    images: [] as string[]
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,7 +46,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           price: v.price.toString()
         })),
         digitalData: initialData.digitalData || { fileUrl: '', expiry: '' },
-        metadata: initialData.metadata || { weight: '', dimensions: '' }
+        metadata: initialData.metadata || { weight: '', dimensions: '' },
+        images: initialData.images || []
       });
     } else {
       setFormData({
@@ -57,7 +59,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({
         isActive: true,
         variants: [{ sku: '', price: '', inventory: 0, attributes: {} }],
         digitalData: { fileUrl: '', expiry: '' },
-        metadata: { weight: '', dimensions: '' }
+        metadata: { weight: '', dimensions: '' },
+        images: []
       });
     }
   }, [initialData, isOpen]);
@@ -111,6 +114,43 @@ export const ProductModal: React.FC<ProductModalProps> = ({
       size="lg"
     >
       <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.section}>
+          <h3>Product Images</h3>
+          <div className={styles.imageGrid}>
+            {formData.images.map((url, i) => (
+              <div key={i} className={styles.imagePreview}>
+                <img src={url} alt={`Product ${i}`} />
+                <button 
+                  type="button" 
+                  className={styles.removeImage} 
+                  onClick={() => setFormData({
+                    ...formData, 
+                    images: formData.images.filter((_, idx) => idx !== i)
+                  })}
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            ))}
+            <div className={styles.addImage}>
+              <Input 
+                placeholder="Paste image URL..." 
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const url = (e.target as HTMLInputElement).value;
+                    if (url) {
+                      setFormData({ ...formData, images: [...formData.images, url] });
+                      (e.target as HTMLInputElement).value = '';
+                    }
+                  }
+                }}
+              />
+              <p className={styles.hint}>Press Enter to add image URL</p>
+            </div>
+          </div>
+        </div>
+
         <div className={styles.section}>
           <div className={styles.sectionHeader}>
             <h3>Basic Information</h3>

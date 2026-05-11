@@ -137,8 +137,53 @@
 .actions {
   display: flex;
   align-items: center;
+  gap: 16px;
   padding-left: 24px;
   border-left: 1px solid var(--border-subtle);
+}
+
+.commerceActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: 8px;
+}
+
+.iconBtn {
+  position: relative;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.iconBtn:hover {
+  color: var(--accent-primary);
+  background: rgba(var(--accent-primary-rgb), 0.05);
+}
+
+.badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: var(--accent-primary);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--bg-primary);
+}
+
+.activeUser {
+  color: var(--accent-primary);
 }
 
 @media (max-width: 768px) {

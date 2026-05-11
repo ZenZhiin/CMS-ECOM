@@ -66,17 +66,6 @@ export declare class ProductsController {
         updatedAt: Date;
     }>;
     create(createProductDto: CreateProductDto): Promise<{
-        variants: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            productId: string;
-            sku: string;
-            price: import("@prisma/client-commerce/runtime/library").Decimal;
-            inventory: number;
-            attributes: import("@prisma/client-commerce/runtime/library").JsonValue | null;
-        }[];
-    } & {
         id: string;
         name: string;
         slug: string;
@@ -90,17 +79,6 @@ export declare class ProductsController {
         updatedAt: Date;
     }>;
     update(id: string, updateDto: any): Promise<{
-        variants: {
-            id: string;
-            createdAt: Date;
-            updatedAt: Date;
-            productId: string;
-            sku: string;
-            price: import("@prisma/client-commerce/runtime/library").Decimal;
-            inventory: number;
-            attributes: import("@prisma/client-commerce/runtime/library").JsonValue | null;
-        }[];
-    } & {
         id: string;
         name: string;
         slug: string;

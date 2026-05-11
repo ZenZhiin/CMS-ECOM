@@ -12,6 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateProductDto = void 0;
 const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
+var ProductType;
+(function (ProductType) {
+    ProductType["PHYSICAL"] = "PHYSICAL";
+    ProductType["DIGITAL"] = "DIGITAL";
+    ProductType["SUBSCRIPTION"] = "SUBSCRIPTION";
+})(ProductType || (ProductType = {}));
 class ProductVariantDto {
     sku;
     price;
@@ -40,10 +46,14 @@ class CreateProductDto {
     name;
     slug;
     description;
+    type;
     basePrice;
     isActive;
     categoryIds;
     variants;
+    digitalData;
+    metadata;
+    images;
 }
 exports.CreateProductDto = CreateProductDto;
 __decorate([
@@ -61,6 +71,11 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateProductDto.prototype, "description", void 0);
+__decorate([
+    (0, class_validator_1.IsEnum)(ProductType),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateProductDto.prototype, "type", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
@@ -81,4 +96,17 @@ __decorate([
     (0, class_transformer_1.Type)(() => ProductVariantDto),
     __metadata("design:type", Array)
 ], CreateProductDto.prototype, "variants", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Object)
+], CreateProductDto.prototype, "digitalData", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Object)
+], CreateProductDto.prototype, "metadata", void 0);
+__decorate([
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Array)
+], CreateProductDto.prototype, "images", void 0);
 //# sourceMappingURL=create-product.dto.js.map

@@ -6,12 +6,14 @@ import { ShoppingCart, ShoppingBag, Search } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 import { commerceService } from '@/features/commerce/services/commerce.service';
 import { useCommerce } from '@/context/CommerceContext';
+import { useToast } from '@/context/ToastContext';
 import styles from './page.module.css';
 
 export default function ShopPage() {
   const [products, setProducts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { addToCart, cartCount } = useCommerce();
+  const { showToast } = useToast();
 
   useEffect(() => {
     fetchProducts();
@@ -40,25 +42,11 @@ export default function ShopPage() {
       price: parseFloat(variant.price),
       quantity: 1
     });
+    showToast(`${product.name} added to cart!`, 'success');
   };
 
   return (
     <div className={styles.shopContainer}>
-      <header className={styles.shopHeader}>
-        <div className={styles.brand}>
-          <div className={styles.logo}>Z</div>
-          <span className="brand-font">Zhiin Store</span>
-        </div>
-        <div className={styles.cartBtn}>
-          <Link href="/cart">
-            <Button variant="secondary">
-              <ShoppingCart size={20} />
-              {cartCount > 0 && <span className={styles.badge}>{cartCount}</span>}
-            </Button>
-          </Link>
-        </div>
-      </header>
-
       <main className={styles.main}>
         <section className={styles.hero}>
           <h1 className="brand-font">Premium Collection</h1>
@@ -71,7 +59,11 @@ export default function ShopPage() {
           ) : products.map((product) => (
             <div key={product.id} className={styles.productCard}>
               <div className={styles.imagePlaceholder}>
-                <ShoppingBag size={48} className={styles.placeholderIcon} />
+                {product.images && product.images.length > 0 ? (
+                  <img src={product.images[0]} alt={product.name} className={styles.productImg} />
+                ) : (
+                  <ShoppingBag size={48} className={styles.placeholderIcon} />
+                )}
               </div>
               <div className={styles.productInfo}>
                 <h3>{product.name}</h3>

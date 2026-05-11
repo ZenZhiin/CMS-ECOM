@@ -28,13 +28,6 @@ export default function CartPage() {
 
   return (
     <div className={styles.container}>
-      <header className={styles.header}>
-        <Link href="/shop" className={styles.backLink}>
-          <ArrowLeft size={20} /> Back to Shop
-        </Link>
-        <h1 className="brand-font">Shopping Cart</h1>
-      </header>
-
       <div className={styles.content}>
         <div className={styles.cartList}>
           {cart.map((item) => (

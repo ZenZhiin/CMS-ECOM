@@ -1,5 +1,11 @@
-import { IsString, IsOptional, IsNumber, IsBoolean, IsArray, ValidateNested, IsNotEmpty } from 'class-validator';
+import { IsString, IsOptional, IsNumber, IsBoolean, IsArray, ValidateNested, IsNotEmpty, IsEnum } from 'class-validator';
 import { Type } from 'class-transformer';
+
+enum ProductType {
+  PHYSICAL = 'PHYSICAL',
+  DIGITAL = 'DIGITAL',
+  SUBSCRIPTION = 'SUBSCRIPTION',
+}
 
 class ProductVariantDto {
   @IsString()
@@ -30,6 +36,10 @@ export class CreateProductDto {
   @IsOptional()
   description?: string;
 
+  @IsEnum(ProductType)
+  @IsOptional()
+  type?: ProductType;
+
   @IsNumber()
   basePrice: number;
 
@@ -45,4 +55,14 @@ export class CreateProductDto {
   @ValidateNested({ each: true })
   @Type(() => ProductVariantDto)
   variants: ProductVariantDto[];
+
+  @IsOptional()
+  digitalData?: any;
+
+  @IsOptional()
+  metadata?: any;
+
+  @IsArray()
+  @IsOptional()
+  images?: string[];
 }

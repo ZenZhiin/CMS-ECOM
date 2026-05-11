@@ -2,7 +2,10 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ShoppingCart, User } from 'lucide-react';
+import { useSettings } from '@/context/SettingsContext';
+import { useCommerce } from '@/context/CommerceContext';
+import { ThemeToggle } from '@/components/atoms/ThemeToggle';
 import styles from './SiteHeader.module.css';
 
 interface NavItem {
@@ -42,9 +45,12 @@ const NavLink: React.FC<{ item: NavItem; level?: number }> = ({ item, level = 0 
   );
 };
 
-import { ThemeToggle } from '@/components/atoms/ThemeToggle';
-
 export const SiteHeader: React.FC<SiteHeaderProps> = ({ siteName, navigation }) => {
+  const { settings } = useSettings();
+  const { cartCount, isCustomerLoggedIn } = useCommerce();
+  
+  const isEcomEnabled = settings?.isEcommerceEnabled;
+
   return (
     <header className={styles.header}>
       <div className={styles.container}>
@@ -58,10 +64,25 @@ export const SiteHeader: React.FC<SiteHeaderProps> = ({ siteName, navigation }) 
             {navigation.map((item, i) => (
               <NavLink key={i} item={item} />
             ))}
+            {isEcomEnabled && (
+              <NavLink item={{ label: 'Shop', url: '/shop' }} />
+            )}
           </nav>
           
           <div className={styles.actions}>
             <ThemeToggle />
+            
+            {isEcomEnabled && (
+              <div className={styles.commerceActions}>
+                <Link href="/cart" className={styles.iconBtn}>
+                  <ShoppingCart size={20} />
+                  {cartCount > 0 && <span className={styles.badge}>{cartCount}</span>}
+                </Link>
+                <Link href="/account" className={styles.iconBtn}>
+                  <User size={20} className={isCustomerLoggedIn ? styles.activeUser : ''} />
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -65,6 +65,7 @@ export default function DashboardLayout({
 
   const ecommerceItems = [
     { icon: ShoppingBag, label: 'Product Catalog', href: '/dashboard/commerce' },
+    { icon: Settings, label: 'Settings', href: '/dashboard/commerce/settings' },
   ];
 
   const standaloneItems = [

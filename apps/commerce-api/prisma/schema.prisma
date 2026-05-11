@@ -33,6 +33,7 @@ model Product {
   basePrice   Decimal          @map("base_price") @db.Decimal(10, 2)
   categories  Category[]
   variants    ProductVariant[]
+  images      String[]         @default([])
   
   // Metadata for different types
   digitalData Json?            @map("digital_data") // { fileUrl: string, expiry: number }
