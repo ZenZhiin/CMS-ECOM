@@ -7,8 +7,8 @@ export declare class ProductsService {
     findAll(): Promise<({
         categories: {
             id: string;
-            name: string;
             slug: string;
+            name: string;
             createdAt: Date;
             updatedAt: Date;
         }[];
@@ -16,19 +16,20 @@ export declare class ProductsService {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            productId: string;
             sku: string;
             price: import("@prisma/client-commerce/runtime/library").Decimal;
             inventory: number;
             attributes: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+            productId: string;
         }[];
     } & {
         id: string;
-        name: string;
         slug: string;
+        name: string;
         description: string | null;
         type: import("@prisma/client-commerce/client").$Enums.ProductType;
         basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
+        images: string[];
         digitalData: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         metadata: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         isActive: boolean;
@@ -38,8 +39,8 @@ export declare class ProductsService {
     findOne(id: string): Promise<{
         categories: {
             id: string;
-            name: string;
             slug: string;
+            name: string;
             createdAt: Date;
             updatedAt: Date;
         }[];
@@ -47,19 +48,20 @@ export declare class ProductsService {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            productId: string;
             sku: string;
             price: import("@prisma/client-commerce/runtime/library").Decimal;
             inventory: number;
             attributes: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+            productId: string;
         }[];
     } & {
         id: string;
-        name: string;
         slug: string;
+        name: string;
         description: string | null;
         type: import("@prisma/client-commerce/client").$Enums.ProductType;
         basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
+        images: string[];
         digitalData: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         metadata: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         isActive: boolean;
@@ -69,8 +71,8 @@ export declare class ProductsService {
     findBySlug(slug: string): Promise<{
         categories: {
             id: string;
-            name: string;
             slug: string;
+            name: string;
             createdAt: Date;
             updatedAt: Date;
         }[];
@@ -78,19 +80,20 @@ export declare class ProductsService {
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            productId: string;
             sku: string;
             price: import("@prisma/client-commerce/runtime/library").Decimal;
             inventory: number;
             attributes: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+            productId: string;
         }[];
     } & {
         id: string;
-        name: string;
         slug: string;
+        name: string;
         description: string | null;
         type: import("@prisma/client-commerce/client").$Enums.ProductType;
         basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
+        images: string[];
         digitalData: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         metadata: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         isActive: boolean;
@@ -98,12 +101,24 @@ export declare class ProductsService {
         updatedAt: Date;
     }>;
     create(dto: CreateProductDto): Promise<{
+        variants: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            sku: string;
+            price: import("@prisma/client-commerce/runtime/library").Decimal;
+            inventory: number;
+            attributes: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+            productId: string;
+        }[];
+    } & {
         id: string;
-        name: string;
         slug: string;
+        name: string;
         description: string | null;
         type: import("@prisma/client-commerce/client").$Enums.ProductType;
         basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
+        images: string[];
         digitalData: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         metadata: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         isActive: boolean;
@@ -112,11 +127,12 @@ export declare class ProductsService {
     }>;
     remove(id: string): Promise<{
         id: string;
-        name: string;
         slug: string;
+        name: string;
         description: string | null;
         type: import("@prisma/client-commerce/client").$Enums.ProductType;
         basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
+        images: string[];
         digitalData: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         metadata: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         isActive: boolean;
@@ -124,12 +140,24 @@ export declare class ProductsService {
         updatedAt: Date;
     }>;
     update(id: string, dto: any): Promise<{
+        variants: {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            sku: string;
+            price: import("@prisma/client-commerce/runtime/library").Decimal;
+            inventory: number;
+            attributes: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+            productId: string;
+        }[];
+    } & {
         id: string;
-        name: string;
         slug: string;
+        name: string;
         description: string | null;
         type: import("@prisma/client-commerce/client").$Enums.ProductType;
         basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
+        images: string[];
         digitalData: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         metadata: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         isActive: boolean;
