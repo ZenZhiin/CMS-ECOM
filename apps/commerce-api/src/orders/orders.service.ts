@@ -5,14 +5,10 @@ import Stripe from 'stripe';
 
 @Injectable()
 export class OrdersService {
-  private stripe: Stripe;
-
   constructor(
     private prisma: PrismaService,
     private mailService: MailService
-  ) {
-    // We'll initialize stripe in a method to use settings from DB
-  }
+  ) {}
 
   private async getStripeClient() {
     const secretKey = process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder';

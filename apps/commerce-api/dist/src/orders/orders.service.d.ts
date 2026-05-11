@@ -3,7 +3,6 @@ import { MailService } from '../mail/mail.service';
 export declare class OrdersService {
     private prisma;
     private mailService;
-    private stripe;
     constructor(prisma: PrismaService, mailService: MailService);
     private getStripeClient;
     findAll(): Promise<({

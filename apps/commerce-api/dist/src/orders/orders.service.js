@@ -20,7 +20,6 @@ const stripe_1 = __importDefault(require("stripe"));
 let OrdersService = class OrdersService {
     prisma;
     mailService;
-    stripe;
     constructor(prisma, mailService) {
         this.prisma = prisma;
         this.mailService = mailService;
