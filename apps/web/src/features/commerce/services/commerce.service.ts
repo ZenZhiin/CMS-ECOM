@@ -70,5 +70,22 @@ export const commerceService = {
     });
     if (!response.ok) throw new Error('Invalid credentials');
     return response.json();
+  },
+
+  // Orders (Admin)
+  getOrders: async () => {
+    const response = await fetch(`${COMMERCE_API_URL}/orders`);
+    if (!response.ok) throw new Error('Failed to fetch orders');
+    return response.json();
+  },
+
+  updateOrder: async (id: string, data: any) => {
+    const response = await fetch(`${COMMERCE_API_URL}/orders/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error('Failed to update order');
+    return response.json();
   }
 };

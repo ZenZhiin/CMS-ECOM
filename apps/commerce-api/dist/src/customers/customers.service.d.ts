@@ -41,6 +41,8 @@ export declare class CustomersService {
             totalAmount: import("@prisma/client-commerce/runtime/library").Decimal;
             shippingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
             billingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+            shippingCarrier: string | null;
+            trackingNumber: string | null;
             paymentIntentId: string | null;
         })[];
         subscriptions: {

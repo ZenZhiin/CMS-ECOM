@@ -64,7 +64,8 @@ export default function DashboardLayout({
   ];
 
   const ecommerceItems = [
-    { icon: ShoppingBag, label: 'Product Catalog', href: '/dashboard/commerce' },
+    { icon: Package, label: 'Product Catalog', href: '/dashboard/commerce' },
+    { icon: ShoppingBag, label: 'Orders & Shipping', href: '/dashboard/commerce/orders' },
     { icon: Settings, label: 'Settings', href: '/dashboard/commerce/settings' },
   ];
 
