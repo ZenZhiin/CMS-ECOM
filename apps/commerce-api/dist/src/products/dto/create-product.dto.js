@@ -17,6 +17,7 @@ var ProductType;
     ProductType["PHYSICAL"] = "PHYSICAL";
     ProductType["DIGITAL"] = "DIGITAL";
     ProductType["SUBSCRIPTION"] = "SUBSCRIPTION";
+    ProductType["BUNDLE"] = "BUNDLE";
 })(ProductType || (ProductType = {}));
 class ProductVariantDto {
     sku;
@@ -42,15 +43,33 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Object)
 ], ProductVariantDto.prototype, "attributes", void 0);
+class BundleItemDto {
+    productId;
+    quantity;
+}
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
+], BundleItemDto.prototype, "productId", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Number)
+], BundleItemDto.prototype, "quantity", void 0);
 class CreateProductDto {
     name;
     slug;
     description;
     type;
     basePrice;
+    salePrice;
+    saleStartDate;
+    saleEndDate;
     isActive;
     categoryIds;
     variants;
+    bundledItems;
     digitalData;
     metadata;
     images;
@@ -81,6 +100,21 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateProductDto.prototype, "basePrice", void 0);
 __decorate([
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Number)
+], CreateProductDto.prototype, "salePrice", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateProductDto.prototype, "saleStartDate", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateProductDto.prototype, "saleEndDate", void 0);
+__decorate([
     (0, class_validator_1.IsBoolean)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Boolean)
@@ -96,6 +130,13 @@ __decorate([
     (0, class_transformer_1.Type)(() => ProductVariantDto),
     __metadata("design:type", Array)
 ], CreateProductDto.prototype, "variants", void 0);
+__decorate([
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => BundleItemDto),
+    __metadata("design:type", Array)
+], CreateProductDto.prototype, "bundledItems", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Object)

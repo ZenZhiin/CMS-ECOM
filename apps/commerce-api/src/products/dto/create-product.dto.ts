@@ -5,6 +5,7 @@ enum ProductType {
   PHYSICAL = 'PHYSICAL',
   DIGITAL = 'DIGITAL',
   SUBSCRIPTION = 'SUBSCRIPTION',
+  BUNDLE = 'BUNDLE',
 }
 
 class ProductVariantDto {
@@ -21,6 +22,16 @@ class ProductVariantDto {
 
   @IsOptional()
   attributes?: any;
+}
+
+class BundleItemDto {
+  @IsString()
+  @IsNotEmpty()
+  productId: string;
+
+  @IsNumber()
+  @IsOptional()
+  quantity?: number;
 }
 
 export class CreateProductDto {
@@ -43,6 +54,18 @@ export class CreateProductDto {
   @IsNumber()
   basePrice: number;
 
+  @IsNumber()
+  @IsOptional()
+  salePrice?: number;
+
+  @IsString()
+  @IsOptional()
+  saleStartDate?: string;
+
+  @IsString()
+  @IsOptional()
+  saleEndDate?: string;
+
   @IsBoolean()
   @IsOptional()
   isActive?: boolean;
@@ -55,6 +78,12 @@ export class CreateProductDto {
   @ValidateNested({ each: true })
   @Type(() => ProductVariantDto)
   variants: ProductVariantDto[];
+
+  @IsArray()
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => BundleItemDto)
+  bundledItems?: BundleItemDto[];
 
   @IsOptional()
   digitalData?: any;

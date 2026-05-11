@@ -2,17 +2,18 @@ import React from 'react';
 import styles from './Select.module.css';
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  placeholder?: string;
   label?: string;
   error?: string;
   options: { label: string; value: string }[];
 }
 
-export const Select: React.FC<SelectProps> = ({ 
-  label, 
-  error, 
-  options, 
-  className, 
-  ...props 
+export const Select: React.FC<SelectProps> = ({
+  label,
+  error,
+  options,
+  className,
+  ...props
 }) => {
   return (
     <div className={`${styles.wrapper} ${className || ''}`}>

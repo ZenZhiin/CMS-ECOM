@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { 
   ShoppingBag, Plus, Search, Filter, Package, Edit2, Trash2, 
-  Tag, List, CreditCard, Truck, ExternalLink, ChevronRight 
+  Tag, List, CreditCard, Truck, ExternalLink, ChevronRight, Copy 
 } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 import { commerceService } from '@/features/commerce/services/commerce.service';
@@ -70,6 +70,17 @@ export default function CommerceDashboardPage() {
       await commerceService.deleteProduct(id);
       await fetchData();
     }
+  };
+
+  const handleDuplicateProduct = (product: any) => {
+    const duplicated = {
+      ...product,
+      id: undefined,
+      name: `${product.name} (Copy)`,
+      slug: `${product.slug}-copy-${Math.floor(Math.random() * 1000)}`,
+    };
+    setEditingProduct(duplicated);
+    setIsProductModalOpen(true);
   };
 
   // Category Actions
@@ -166,6 +177,9 @@ export default function CommerceDashboardPage() {
                       <div className={styles.actions}>
                         <button className={styles.iconBtn} onClick={() => { setEditingProduct(product); setIsProductModalOpen(true); }}>
                           <Edit2 size={16} />
+                        </button>
+                        <button className={styles.iconBtn} onClick={() => handleDuplicateProduct(product)} title="Duplicate">
+                          <Copy size={16} />
                         </button>
                         <button className={styles.iconBtnDelete} onClick={() => handleDeleteProduct(product.id)}>
                           <Trash2 size={16} />

@@ -6,7 +6,6 @@ import { Modal } from '@/components/atoms/Modal';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { Select } from '@/components/atoms/Select';
-import { commerceService } from '../services/commerce.service';
 import { useToast } from '@/context/ToastContext';
 import styles from './OrderDetailsModal.module.css';
 
@@ -14,14 +13,14 @@ interface OrderDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
   order: any;
-  onUpdate: () => void;
+  onUpdateStatus: (id: string, data: any) => Promise<void>;
 }
 
 export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
   isOpen,
   onClose,
   order,
-  onUpdate
+  onUpdateStatus
 }) => {
   const [status, setStatus] = useState('');
   const [carrier, setCarrier] = useState('');
@@ -40,13 +39,12 @@ export const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
   const handleUpdate = async () => {
     setIsSubmitting(true);
     try {
-      await commerceService.updateOrder(order.id, {
+      await onUpdateStatus(order.id, {
         status,
         shippingCarrier: carrier,
         trackingNumber: tracking
       });
       showToast('Order updated successfully', 'success');
-      onUpdate();
       onClose();
     } catch (err) {
       showToast('Failed to update order', 'error');

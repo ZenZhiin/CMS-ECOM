@@ -5,7 +5,7 @@ import { Modal } from '@/components/atoms/Modal';
 import { Input } from '@/components/atoms/Input';
 import { Button } from '@/components/atoms/Button';
 import { Select } from '@/components/atoms/Select';
-import { Plus, Trash2, Tag, Image as ImageIcon, X } from 'lucide-react';
+import { Plus, Trash2, Tag, Image as ImageIcon, X, Box, Layers, Calendar, DollarSign } from 'lucide-react';
 import { commerceService } from '@/features/commerce/services/commerce.service';
 import styles from './ProductModal.module.css';
 
@@ -28,14 +28,19 @@ export const ProductModal: React.FC<ProductModalProps> = ({
     description: '',
     type: 'PHYSICAL',
     basePrice: '',
+    salePrice: '',
+    saleStartDate: '',
+    saleEndDate: '',
     isActive: true,
     variants: [{ sku: '', price: '', inventory: 0, attributes: {} }],
-    digitalData: { fileUrl: '', expiry: '' },
+    digitalData: { fileUrl: '', expiry: '', videoUrl: '', apiKey: '', secretKey: '' },
     metadata: { weight: '', dimensions: '' },
     images: [] as string[],
-    categoryIds: [] as string[]
+    categoryIds: [] as string[],
+    bundledItems: [] as any[]
   });
 
+  const [allProducts, setAllProducts] = useState<any[]>([]);
   const [imageUrl, setImageUrl] = useState('');
   const [categories, setCategories] = useState<any[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,6 +48,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       fetchCategories();
+      fetchProducts();
     }
   }, [isOpen]);
 
@@ -55,19 +61,35 @@ export const ProductModal: React.FC<ProductModalProps> = ({
     }
   };
 
+  const fetchProducts = async () => {
+    try {
+      const data = await commerceService.getProducts();
+      setAllProducts(data.filter((p: any) => p.id !== initialData?.id));
+    } catch (err) {
+      console.error('Failed to fetch products', err);
+    }
+  };
+
   useEffect(() => {
     if (initialData) {
       setFormData({
         ...initialData,
-        basePrice: initialData.basePrice.toString(),
+        basePrice: initialData.basePrice?.toString() || '',
+        salePrice: initialData.salePrice?.toString() || '',
+        saleStartDate: initialData.saleStartDate ? new Date(initialData.saleStartDate).toISOString().split('T')[0] : '',
+        saleEndDate: initialData.saleEndDate ? new Date(initialData.saleEndDate).toISOString().split('T')[0] : '',
         variants: initialData.variants.map((v: any) => ({
           ...v,
           price: v.price.toString()
         })),
-        digitalData: initialData.digitalData || { fileUrl: '', expiry: '' },
+        digitalData: initialData.digitalData || { fileUrl: '', expiry: '', videoUrl: '', apiKey: '', secretKey: '' },
         metadata: initialData.metadata || { weight: '', dimensions: '' },
         images: initialData.images || [],
-        categoryIds: initialData.categories?.map((c: any) => c.id) || []
+        categoryIds: initialData.categories?.map((c: any) => c.id) || [],
+        bundledItems: initialData.bundledItems?.map((i: any) => ({
+          productId: i.productId,
+          quantity: i.quantity
+        })) || []
       });
     } else {
       setFormData({
@@ -76,12 +98,16 @@ export const ProductModal: React.FC<ProductModalProps> = ({
         description: '',
         type: 'PHYSICAL',
         basePrice: '',
+        salePrice: '',
+        saleStartDate: '',
+        saleEndDate: '',
         isActive: true,
         variants: [{ sku: '', price: '', inventory: 0, attributes: {} }],
-        digitalData: { fileUrl: '', expiry: '' },
+        digitalData: { fileUrl: '', expiry: '', videoUrl: '', apiKey: '', secretKey: '' },
         metadata: { weight: '', dimensions: '' },
         images: [],
-        categoryIds: []
+        categoryIds: [],
+        bundledItems: []
       });
     }
   }, [initialData, isOpen]);
@@ -128,6 +154,31 @@ export const ProductModal: React.FC<ProductModalProps> = ({
     setFormData({ ...formData, variants: newVariants });
   };
 
+  // Bundle Logic
+  const addBundleItem = (productId: string) => {
+    if (formData.bundledItems.some(i => i.productId === productId)) return;
+    setFormData({
+      ...formData,
+      bundledItems: [...formData.bundledItems, { productId, quantity: 1 }]
+    });
+  };
+
+  const removeBundleItem = (productId: string) => {
+    setFormData({
+      ...formData,
+      bundledItems: formData.bundledItems.filter(i => i.productId !== productId)
+    });
+  };
+
+  const updateBundleQuantity = (productId: string, quantity: number) => {
+    setFormData({
+      ...formData,
+      bundledItems: formData.bundledItems.map(i => 
+        i.productId === productId ? { ...i, quantity } : i
+      )
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -135,6 +186,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
       await onSave({
         ...formData,
         basePrice: parseFloat(formData.basePrice),
+        salePrice: formData.salePrice ? parseFloat(formData.salePrice) : null,
         variants: formData.variants.map(v => ({
           ...v,
           price: parseFloat(v.price as string),
@@ -154,7 +206,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       title={initialData ? 'Edit Product' : 'Add New Product'}
-      size="lg"
+      size="xl"
     >
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.section}>
@@ -177,7 +229,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
               </Button>
             </div>
             <p className={styles.hint}>Max 6 images. First image is the cover.</p>
-
+            
             <div className={styles.imageGrid}>
               {formData.images.map((url, idx) => (
                 <div key={idx} className={styles.imagePreview}>
@@ -196,7 +248,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
             </div>
           </div>
         </div>
-
+        
         <div className={styles.section}>
           <h3>Basic Information</h3>
           <div className={styles.row}>
@@ -213,7 +265,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
               required
             />
           </div>
-
+          
           <div className={styles.field}>
             <label>Categories</label>
             <div className={styles.categoryGrid}>
@@ -249,11 +301,49 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 options={[
                   { label: 'Physical', value: 'PHYSICAL' },
                   { label: 'Digital', value: 'DIGITAL' },
-                  { label: 'Subscription', value: 'SUBSCRIPTION' }
+                  { label: 'Subscription', value: 'SUBSCRIPTION' },
+                  { label: 'Bundle/Package', value: 'BUNDLE' }
                 ]}
               />
             </div>
           </div>
+        </div>
+
+        {/* Campaign Section */}
+        <div className={styles.section}>
+          <div className={styles.sectionHeader}>
+            <h3>Campaign & Sale</h3>
+            <span className={styles.campaignBadge}>
+              <DollarSign size={14} /> Active Sale Support
+            </span>
+          </div>
+          <div className={styles.row}>
+            <Input 
+              label="Sale Price ($)" 
+              type="number"
+              step="0.01"
+              value={formData.salePrice}
+              onChange={(e) => setFormData({...formData, salePrice: e.target.value})}
+              placeholder="Leave empty for no sale"
+            />
+            <div className={styles.row}>
+              <Input 
+                label="Start Date" 
+                type="date"
+                value={formData.saleStartDate}
+                onChange={(e) => setFormData({...formData, saleStartDate: e.target.value})}
+              />
+              <Input 
+                label="End Date" 
+                type="date"
+                value={formData.saleEndDate}
+                onChange={(e) => setFormData({...formData, saleEndDate: e.target.value})}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.section}>
           <div className={styles.field}>
             <label>Description</label>
             <textarea
@@ -263,6 +353,90 @@ export const ProductModal: React.FC<ProductModalProps> = ({
             />
           </div>
         </div>
+
+        {/* Digital Course Specific Fields */}
+        {formData.type === 'DIGITAL' && (
+          <div className={styles.section}>
+            <h3>Digital Delivery Details</h3>
+            <div className={styles.row}>
+              <Input 
+                label="File/Asset URL" 
+                value={formData.digitalData.fileUrl}
+                onChange={(e) => setFormData({...formData, digitalData: {...formData.digitalData, fileUrl: e.target.value}})}
+                placeholder="Secure download link"
+              />
+              <Input 
+                label="Video URL (Optional)" 
+                value={formData.digitalData.videoUrl}
+                onChange={(e) => setFormData({...formData, digitalData: {...formData.digitalData, videoUrl: e.target.value}})}
+                placeholder="Vimeo/YouTube/Custom link"
+              />
+            </div>
+            <div className={styles.row}>
+              <Input 
+                label="Video API Key" 
+                value={formData.digitalData.apiKey}
+                onChange={(e) => setFormData({...formData, digitalData: {...formData.digitalData, apiKey: e.target.value}})}
+              />
+              <Input 
+                label="Video Secret Key" 
+                type="password"
+                value={formData.digitalData.secretKey}
+                onChange={(e) => setFormData({...formData, digitalData: {...formData.digitalData, secretKey: e.target.value}})}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Bundle Management */}
+        {formData.type === 'BUNDLE' && (
+          <div className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <h3>Package Contents</h3>
+              <div className={styles.productPicker}>
+                <Select 
+                  placeholder="Select product to add..."
+                  onChange={(e) => addBundleItem(e.target.value)}
+                  options={[
+                    { label: 'Select product...', value: '' },
+                    ...allProducts.map(p => ({ label: p.name, value: p.id }))
+                  ]}
+                />
+              </div>
+            </div>
+            <div className={styles.bundleList}>
+              {formData.bundledItems.map((item) => {
+                const product = allProducts.find(p => p.id === item.productId);
+                return (
+                  <div key={item.productId} className={styles.bundleItem}>
+                    <div className={styles.bundleInfo}>
+                      <Box size={16} />
+                      <span>{product?.name || 'Unknown Product'}</span>
+                    </div>
+                    <div className={styles.bundleActions}>
+                      <input 
+                        type="number" 
+                        value={item.quantity}
+                        onChange={(e) => updateBundleQuantity(item.productId, parseInt(e.target.value))}
+                        min="1"
+                        className={styles.qtyInput}
+                      />
+                      <button type="button" className={styles.removeBundleBtn} onClick={() => removeBundleItem(item.productId)}>
+                        <X size={14} />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+              {formData.bundledItems.length === 0 && (
+                <div className={styles.emptyBundle}>
+                  <Layers size={32} />
+                  <p>Add products to create a package.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         <div className={styles.section}>
           <div className={styles.sectionHeader}>

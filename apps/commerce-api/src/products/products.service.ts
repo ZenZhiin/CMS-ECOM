@@ -14,6 +14,11 @@ export class ProductsService {
       include: {
         variants: true,
         categories: true,
+        bundledItems: {
+          include: {
+            product: true
+          }
+        }
       },
     });
   }
@@ -24,6 +29,11 @@ export class ProductsService {
       include: {
         variants: true,
         categories: true,
+        bundledItems: {
+          include: {
+            product: true
+          }
+        }
       },
     });
 
@@ -40,6 +50,11 @@ export class ProductsService {
       include: {
         variants: true,
         categories: true,
+        bundledItems: {
+          include: {
+            product: true
+          }
+        }
       },
     });
 
@@ -65,6 +80,9 @@ export class ProductsService {
         slug: dto.slug,
         description: dto.description,
         basePrice: dto.basePrice,
+        salePrice: dto.salePrice,
+        saleStartDate: dto.saleStartDate ? new Date(dto.saleStartDate) : null,
+        saleEndDate: dto.saleEndDate ? new Date(dto.saleEndDate) : null,
         type: dto.type || 'PHYSICAL',
         isActive: dto.isActive,
         variants: {
@@ -76,9 +94,16 @@ export class ProductsService {
         metadata: dto.metadata || {},
         digitalData: dto.digitalData || {},
         images: dto.images || [],
+        bundledItems: {
+          create: dto.bundledItems?.map(item => ({
+            productId: item.productId,
+            quantity: item.quantity || 1
+          })) || []
+        }
       },
       include: {
         variants: true,
+        bundledItems: true,
       },
     });
   }
@@ -99,6 +124,9 @@ export class ProductsService {
         slug: dto.slug,
         description: dto.description,
         basePrice: dto.basePrice,
+        salePrice: dto.salePrice,
+        saleStartDate: dto.saleStartDate ? new Date(dto.saleStartDate) : null,
+        saleEndDate: dto.saleEndDate ? new Date(dto.saleEndDate) : null,
         type: dto.type,
         isActive: dto.isActive,
         categories: {
@@ -114,9 +142,17 @@ export class ProductsService {
             return rest;
           }),
         },
+        bundledItems: {
+          deleteMany: {},
+          create: dto.bundledItems?.map((item: any) => ({
+            productId: item.productId,
+            quantity: item.quantity || 1
+          })) || []
+        }
       },
       include: {
         variants: true,
+        bundledItems: true
       },
     });
   }
