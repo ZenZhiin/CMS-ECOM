@@ -65,6 +65,26 @@ export class OrdersService {
     return order;
   }
 
+  async findByCustomer(customerId: string) {
+    return this.prisma.order.findMany({
+      where: { customerId },
+      include: {
+        items: {
+          include: {
+            variant: {
+              include: {
+                product: true
+              }
+            }
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+  }
+
   async createPaymentIntent(data: { amount: number; currency: string }) {
     const stripe = await this.getStripeClient();
     try {

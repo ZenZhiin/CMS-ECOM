@@ -22,6 +22,7 @@ export declare class OrdersService {
                     description: string | null;
                     type: import("@prisma/client-commerce/client").$Enums.ProductType;
                     basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
+                    images: string[];
                     digitalData: import("@prisma/client-commerce/runtime/library").JsonValue | null;
                     metadata: import("@prisma/client-commerce/runtime/library").JsonValue | null;
                     isActive: boolean;
@@ -51,6 +52,8 @@ export declare class OrdersService {
         totalAmount: import("@prisma/client-commerce/runtime/library").Decimal;
         shippingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         billingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+        shippingCarrier: string | null;
+        trackingNumber: string | null;
         paymentIntentId: string | null;
         createdAt: Date;
         updatedAt: Date;
@@ -77,6 +80,7 @@ export declare class OrdersService {
                     description: string | null;
                     type: import("@prisma/client-commerce/client").$Enums.ProductType;
                     basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
+                    images: string[];
                     digitalData: import("@prisma/client-commerce/runtime/library").JsonValue | null;
                     metadata: import("@prisma/client-commerce/runtime/library").JsonValue | null;
                     isActive: boolean;
@@ -106,10 +110,60 @@ export declare class OrdersService {
         totalAmount: import("@prisma/client-commerce/runtime/library").Decimal;
         shippingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         billingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+        shippingCarrier: string | null;
+        trackingNumber: string | null;
         paymentIntentId: string | null;
         createdAt: Date;
         updatedAt: Date;
     }>;
+    findByCustomer(customerId: string): Promise<({
+        items: ({
+            variant: {
+                product: {
+                    id: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    name: string;
+                    slug: string;
+                    description: string | null;
+                    type: import("@prisma/client-commerce/client").$Enums.ProductType;
+                    basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
+                    images: string[];
+                    digitalData: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+                    metadata: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+                    isActive: boolean;
+                };
+            } & {
+                id: string;
+                createdAt: Date;
+                updatedAt: Date;
+                productId: string;
+                sku: string;
+                price: import("@prisma/client-commerce/runtime/library").Decimal;
+                inventory: number;
+                attributes: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+            };
+        } & {
+            id: string;
+            orderId: string;
+            productVariantId: string;
+            quantity: number;
+            priceAtPurchase: import("@prisma/client-commerce/runtime/library").Decimal;
+        })[];
+    } & {
+        id: string;
+        orderNumber: string;
+        customerId: string;
+        status: import("@prisma/client-commerce/client").$Enums.OrderStatus;
+        totalAmount: import("@prisma/client-commerce/runtime/library").Decimal;
+        shippingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+        billingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+        shippingCarrier: string | null;
+        trackingNumber: string | null;
+        paymentIntentId: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+    })[]>;
     createPaymentIntent(data: {
         amount: number;
         currency: string;
@@ -138,6 +192,7 @@ export declare class OrdersService {
                     description: string | null;
                     type: import("@prisma/client-commerce/client").$Enums.ProductType;
                     basePrice: import("@prisma/client-commerce/runtime/library").Decimal;
+                    images: string[];
                     digitalData: import("@prisma/client-commerce/runtime/library").JsonValue | null;
                     metadata: import("@prisma/client-commerce/runtime/library").JsonValue | null;
                     isActive: boolean;
@@ -167,6 +222,8 @@ export declare class OrdersService {
         totalAmount: import("@prisma/client-commerce/runtime/library").Decimal;
         shippingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         billingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+        shippingCarrier: string | null;
+        trackingNumber: string | null;
         paymentIntentId: string | null;
         createdAt: Date;
         updatedAt: Date;
@@ -179,6 +236,8 @@ export declare class OrdersService {
         totalAmount: import("@prisma/client-commerce/runtime/library").Decimal;
         shippingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
         billingAddress: import("@prisma/client-commerce/runtime/library").JsonValue | null;
+        shippingCarrier: string | null;
+        trackingNumber: string | null;
         paymentIntentId: string | null;
         createdAt: Date;
         updatedAt: Date;

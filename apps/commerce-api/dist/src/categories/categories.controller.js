@@ -12,54 +12,51 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrdersController = void 0;
+exports.CategoriesController = void 0;
 const common_1 = require("@nestjs/common");
-const orders_service_1 = require("./orders.service");
-let OrdersController = class OrdersController {
-    ordersService;
-    constructor(ordersService) {
-        this.ordersService = ordersService;
+const categories_service_1 = require("./categories.service");
+let CategoriesController = class CategoriesController {
+    categoriesService;
+    constructor(categoriesService) {
+        this.categoriesService = categoriesService;
     }
     findAll() {
-        return this.ordersService.findAll();
+        return this.categoriesService.findAll();
     }
     findOne(id) {
-        return this.ordersService.findOne(id);
+        return this.categoriesService.findOne(id);
     }
-    findByCustomer(customerId) {
-        return this.ordersService.findByCustomer(customerId);
+    create(data) {
+        return this.categoriesService.create(data);
     }
     update(id, data) {
-        return this.ordersService.update(id, data);
+        return this.categoriesService.update(id, data);
     }
-    createPaymentIntent(data) {
-        return this.ordersService.createPaymentIntent(data);
-    }
-    createOrder(data) {
-        return this.ordersService.createOrder(data);
+    remove(id) {
+        return this.categoriesService.remove(id);
     }
 };
-exports.OrdersController = OrdersController;
+exports.CategoriesController = CategoriesController;
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], OrdersController.prototype, "findAll", null);
+], CategoriesController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], OrdersController.prototype, "findOne", null);
+], CategoriesController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Get)('customer/:customerId'),
-    __param(0, (0, common_1.Param)('customerId')),
+    (0, common_1.Post)(),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], OrdersController.prototype, "findByCustomer", null);
+], CategoriesController.prototype, "create", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),
@@ -67,23 +64,16 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
-], OrdersController.prototype, "update", null);
+], CategoriesController.prototype, "update", null);
 __decorate([
-    (0, common_1.Post)('create-payment-intent'),
-    __param(0, (0, common_1.Body)()),
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], OrdersController.prototype, "createPaymentIntent", null);
-__decorate([
-    (0, common_1.Post)(),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], OrdersController.prototype, "createOrder", null);
-exports.OrdersController = OrdersController = __decorate([
-    (0, common_1.Controller)('orders'),
-    __metadata("design:paramtypes", [orders_service_1.OrdersService])
-], OrdersController);
-//# sourceMappingURL=orders.controller.js.map
+], CategoriesController.prototype, "remove", null);
+exports.CategoriesController = CategoriesController = __decorate([
+    (0, common_1.Controller)('categories'),
+    __metadata("design:paramtypes", [categories_service_1.CategoriesService])
+], CategoriesController);
+//# sourceMappingURL=categories.controller.js.map

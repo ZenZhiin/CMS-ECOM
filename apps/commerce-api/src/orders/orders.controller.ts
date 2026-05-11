@@ -15,6 +15,11 @@ export class OrdersController {
     return this.ordersService.findOne(id);
   }
 
+  @Get('customer/:customerId')
+  findByCustomer(@Param('customerId') customerId: string) {
+    return this.ordersService.findByCustomer(customerId);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() data: any) {
     return this.ordersService.update(id, data);

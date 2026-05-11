@@ -176,3 +176,36 @@
   border-radius: 8px;
   text-align: center;
 }
+
+.categoryGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.categoryChip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.categoryChip:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.activeChip {
+  background: var(--primary-color);
+  color: white !important;
+  border-color: var(--primary-color);
+}

@@ -13,12 +13,13 @@ const products_module_1 = require("./products/products.module");
 const customers_module_1 = require("./customers/customers.module");
 const orders_module_1 = require("./orders/orders.module");
 const mail_module_1 = require("./mail/mail.module");
+const categories_module_1 = require("./categories/categories.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [prisma_module_1.PrismaModule, products_module_1.ProductsModule, customers_module_1.CustomersModule, orders_module_1.OrdersModule, mail_module_1.MailModule],
+        imports: [prisma_module_1.PrismaModule, products_module_1.ProductsModule, customers_module_1.CustomersModule, orders_module_1.OrdersModule, mail_module_1.MailModule, categories_module_1.CategoriesModule],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

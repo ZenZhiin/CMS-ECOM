@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
-import { User, Lock, Mail, ShoppingBag, Package, LogOut, ArrowLeft } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { User, Lock, Mail, ShoppingBag, Package, LogOut, ArrowLeft, ChevronRight, Download, Truck, Clock } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { useCommerce } from '@/context/CommerceContext';
 import { useToast } from '@/context/ToastContext';
+import { commerceService } from '@/features/commerce/services/commerce.service';
 import styles from './page.module.css';
 
 export default function AccountPage() {
@@ -25,6 +26,23 @@ export default function AccountPage() {
     lastName: ''
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [orders, setOrders] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState('orders');
+
+  useEffect(() => {
+    if (isCustomerLoggedIn && customer?.id) {
+      fetchOrders();
+    }
+  }, [isCustomerLoggedIn, customer?.id]);
+
+  const fetchOrders = async () => {
+    try {
+      const data = await commerceService.getCustomerOrders(customer.id);
+      setOrders(data);
+    } catch (err) {
+      console.error('Failed to fetch orders', err);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,12 +52,28 @@ export default function AccountPage() {
         await loginCustomer({ email: formData.email, password: formData.password });
         showToast('Welcome back!', 'success');
       } else {
-        // Register logic...
+        await commerceService.registerCustomer({
+          email: formData.email,
+          password: formData.password,
+          firstName: formData.firstName,
+          lastName: formData.lastName
+        });
+        showToast('Account created! Please login.', 'success');
+        setIsLogin(true);
       }
     } catch (err: any) {
       showToast(err.message || 'Authentication failed', 'error');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'PAID': return styles.statusPaid;
+      case 'SHIPPED': return styles.statusShipped;
+      case 'COMPLETED': return styles.statusCompleted;
+      default: return styles.statusPending;
     }
   };
 
@@ -57,27 +91,117 @@ export default function AccountPage() {
             </div>
           </div>
           <nav className={styles.nav}>
-            <button className={styles.active}><Package size={18} /> Orders</button>
-            <button><ShoppingBag size={18} /> Subscriptions</button>
-            <button><User size={18} /> Profile Settings</button>
-            <button onClick={logoutCustomer} className={styles.logout}><LogOut size={18} /> Logout</button>
+            <button 
+              className={activeTab === 'orders' ? styles.active : ''} 
+              onClick={() => setActiveTab('orders')}
+            >
+              <Package size={18} /> Orders
+            </button>
+            <button 
+              className={activeTab === 'profile' ? styles.active : ''} 
+              onClick={() => setActiveTab('profile')}
+            >
+              <User size={18} /> Profile Settings
+            </button>
+            <button onClick={logoutCustomer} className={styles.logout}>
+              <LogOut size={18} /> Logout
+            </button>
           </nav>
         </aside>
 
         <main className={styles.content}>
           <header className={styles.header}>
-            <h1 className="brand-font">My Dashboard</h1>
-            <p>Track your orders, downloads, and subscriptions.</p>
+            <h1 className="brand-font">My {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h1>
+            <p>
+              {activeTab === 'orders' 
+                ? 'Track your orders, downloads, and shipping status.' 
+                : 'Manage your personal information and security.'}
+            </p>
           </header>
 
-          <section className={styles.ordersSection}>
-            <div className={styles.emptyOrders}>
-              <Package size={48} />
-              <h3>No orders yet</h3>
-              <p>You haven't placed any orders yet. Start shopping to see them here!</p>
-              <Button onClick={() => window.location.href = '/shop'}>Go to Shop</Button>
-            </div>
-          </section>
+          {activeTab === 'orders' && (
+            <section className={styles.ordersSection}>
+              {orders.length === 0 ? (
+                <div className={styles.emptyOrders}>
+                  <Package size={48} />
+                  <h3>No orders yet</h3>
+                  <p>You haven't placed any orders yet. Start shopping to see them here!</p>
+                  <Button onClick={() => window.location.href = '/shop'}>Go to Shop</Button>
+                </div>
+              ) : (
+                <div className={styles.ordersList}>
+                  {orders.map((order) => (
+                    <div key={order.id} className={styles.orderCard}>
+                      <div className={styles.orderHeader}>
+                        <div>
+                          <span className={styles.orderNumber}>#{order.orderNumber}</span>
+                          <span className={styles.orderDate}>
+                            {new Date(order.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <span className={`${styles.statusBadge} ${getStatusColor(order.status)}`}>
+                          {order.status}
+                        </span>
+                      </div>
+                      
+                      <div className={styles.orderItems}>
+                        {order.items.map((item: any) => (
+                          <div key={item.id} className={styles.orderItem}>
+                            <div className={styles.itemInfo}>
+                              <div className={styles.itemIcon}>
+                                {item.variant.product.type === 'DIGITAL' ? <Download size={16} /> : <Package size={16} />}
+                              </div>
+                              <div>
+                                <p className={styles.itemName}>{item.variant.product.name}</p>
+                                <p className={styles.itemVariant}>{item.variant.sku} × {item.quantity}</p>
+                              </div>
+                            </div>
+                            <span className={styles.itemPrice}>${(item.priceAtPurchase * item.quantity).toFixed(2)}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className={styles.orderFooter}>
+                        <div className={styles.orderTotal}>
+                          <span>Total Amount</span>
+                          <span className={styles.amount}>${parseFloat(order.totalAmount).toFixed(2)}</span>
+                        </div>
+                        
+                        {order.status === 'SHIPPED' && order.trackingNumber && (
+                          <div className={styles.shippingInfo}>
+                            <Truck size={14} /> 
+                            <span>{order.shippingCarrier}: {order.trackingNumber}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+
+          {activeTab === 'profile' && (
+            <section className={styles.profileSection}>
+              <div className={styles.card}>
+                <h3>Personal Information</h3>
+                <div className={styles.profileGrid}>
+                  <div className={styles.profileField}>
+                    <label>First Name</label>
+                    <p>{customer?.firstName}</p>
+                  </div>
+                  <div className={styles.profileField}>
+                    <label>Last Name</label>
+                    <p>{customer?.lastName}</p>
+                  </div>
+                  <div className={styles.profileField}>
+                    <label>Email Address</label>
+                    <p>{customer?.email}</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
         </main>
       </div>
     );

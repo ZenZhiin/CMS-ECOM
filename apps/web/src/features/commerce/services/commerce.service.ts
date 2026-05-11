@@ -78,6 +78,12 @@ export const commerceService = {
     if (!response.ok) throw new Error('Failed to fetch orders');
     return response.json();
   },
+  
+  getCustomerOrders: async (customerId: string) => {
+    const response = await fetch(`${COMMERCE_API_URL}/orders/customer/${customerId}`);
+    if (!response.ok) throw new Error('Failed to fetch customer orders');
+    return response.json();
+  },
 
   updateOrder: async (id: string, data: any) => {
     const response = await fetch(`${COMMERCE_API_URL}/orders/${id}`, {
@@ -106,6 +112,41 @@ export const commerceService = {
       body: JSON.stringify(data)
     });
     if (!response.ok) throw new Error('Failed to create order');
+    return response.json();
+  },
+
+  // Categories
+  getCategories: async () => {
+    const response = await fetch(`${COMMERCE_API_URL}/categories`);
+    if (!response.ok) throw new Error('Failed to fetch categories');
+    return response.json();
+  },
+
+  createCategory: async (data: any) => {
+    const response = await fetch(`${COMMERCE_API_URL}/categories`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error('Failed to create category');
+    return response.json();
+  },
+
+  updateCategory: async (id: string, data: any) => {
+    const response = await fetch(`${COMMERCE_API_URL}/categories/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error('Failed to update category');
+    return response.json();
+  },
+
+  deleteCategory: async (id: string) => {
+    const response = await fetch(`${COMMERCE_API_URL}/categories/${id}`, {
+      method: 'DELETE'
+    });
+    if (!response.ok) throw new Error('Failed to delete category');
     return response.json();
   }
 };

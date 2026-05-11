@@ -75,6 +75,25 @@ let OrdersService = class OrdersService {
             throw new common_1.NotFoundException('Order not found');
         return order;
     }
+    async findByCustomer(customerId) {
+        return this.prisma.order.findMany({
+            where: { customerId },
+            include: {
+                items: {
+                    include: {
+                        variant: {
+                            include: {
+                                product: true
+                            }
+                        }
+                    }
+                }
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
+    }
     async createPaymentIntent(data) {
         const stripe = await this.getStripeClient();
         try {

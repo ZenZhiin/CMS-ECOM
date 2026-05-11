@@ -101,6 +101,9 @@ let ProductsService = ProductsService_1 = class ProductsService {
                 basePrice: dto.basePrice,
                 type: dto.type,
                 isActive: dto.isActive,
+                categories: {
+                    set: dto.categoryIds?.map((id) => ({ id })) || [],
+                },
                 metadata: dto.metadata,
                 digitalData: dto.digitalData,
                 images: dto.images,
