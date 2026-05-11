@@ -133,20 +133,26 @@ export const ProductModal: React.FC<ProductModalProps> = ({
               </div>
             ))}
             <div className={styles.addImage}>
-              <Input 
-                placeholder="Paste image URL..." 
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                    const url = (e.target as HTMLInputElement).value;
-                    if (url) {
-                      setFormData({ ...formData, images: [...formData.images, url] });
-                      (e.target as HTMLInputElement).value = '';
-                    }
-                  }
-                }}
-              />
-              <p className={styles.hint}>Press Enter to add image URL</p>
+              {formData.images.length < 6 ? (
+                <>
+                  <Input 
+                    placeholder="Paste image URL..." 
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const url = (e.target as HTMLInputElement).value;
+                        if (url) {
+                          setFormData({ ...formData, images: [...formData.images, url] });
+                          (e.target as HTMLInputElement).value = '';
+                        }
+                      }
+                    }}
+                  />
+                  <p className={styles.hint}>Press Enter to add (Max 6 images)</p>
+                </>
+              ) : (
+                <p className={styles.limitHint}>Maximum 6 images reached.</p>
+              )}
             </div>
           </div>
         </div>

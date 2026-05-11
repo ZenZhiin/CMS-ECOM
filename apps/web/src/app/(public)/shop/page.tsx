@@ -57,7 +57,7 @@ export default function ShopPage() {
           {isLoading ? (
             <div className={styles.loading}>Loading shop...</div>
           ) : products.map((product) => (
-            <div key={product.id} className={styles.productCard}>
+            <Link key={product.id} href={`/product/${product.slug}`} className={styles.productCard}>
               <div className={styles.imagePlaceholder}>
                 {product.images && product.images.length > 0 ? (
                   <img src={product.images[0]} alt={product.name} className={styles.productImg} />
@@ -70,12 +70,16 @@ export default function ShopPage() {
                 <p className={styles.description}>{product.description}</p>
                 <div className={styles.priceRow}>
                   <span className={styles.price}>${parseFloat(product.basePrice).toFixed(2)}</span>
-                  <Button size="sm" onClick={() => handleAddToCart(product)}>
+                  <Button size="sm" onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleAddToCart(product);
+                  }}>
                     Add to Cart
                   </Button>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </main>

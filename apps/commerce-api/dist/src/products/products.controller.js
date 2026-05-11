@@ -27,6 +27,9 @@ let ProductsController = class ProductsController {
     findOne(id) {
         return this.productsService.findOne(id);
     }
+    findBySlug(slug) {
+        return this.productsService.findBySlug(slug);
+    }
     create(createProductDto) {
         return this.productsService.create(createProductDto);
     }
@@ -51,6 +54,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], ProductsController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Get)('slug/:slug'),
+    __param(0, (0, common_1.Param)('slug')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], ProductsController.prototype, "findBySlug", null);
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.UsePipes)(new common_1.ValidationPipe({ transform: true })),

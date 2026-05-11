@@ -160,3 +160,8 @@
 .productCard:hover .productImg {
   transform: scale(1.05);
 }
+
+.productCard {
+  text-decoration: none;
+  color: inherit;
+}

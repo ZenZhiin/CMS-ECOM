@@ -41,6 +41,19 @@ let ProductsService = ProductsService_1 = class ProductsService {
         }
         return product;
     }
+    async findBySlug(slug) {
+        const product = await this.prisma.product.findUnique({
+            where: { slug },
+            include: {
+                variants: true,
+                categories: true,
+            },
+        });
+        if (!product) {
+            throw new common_1.NotFoundException(`Product with slug ${slug} not found`);
+        }
+        return product;
+    }
     async create(dto) {
         const existing = await this.prisma.product.findUnique({
             where: { slug: dto.slug },

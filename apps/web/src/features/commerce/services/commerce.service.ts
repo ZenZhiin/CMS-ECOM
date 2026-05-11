@@ -17,6 +17,12 @@ export const commerceService = {
     return response.json();
   },
 
+  getProductBySlug: async (slug: string) => {
+    const response = await fetch(`${COMMERCE_API_URL}/products/slug/${slug}`);
+    if (!response.ok) throw new Error('Product not found');
+    return response.json();
+  },
+
   createProduct: async (data: any) => {
     const response = await fetch(`${COMMERCE_API_URL}/products`, {
       method: 'POST',
