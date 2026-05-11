@@ -80,7 +80,6 @@ export default function DashboardLayout({
       {/* Sidebar */}
       <aside className={`${styles.sidebar} ${isSidebarOpen ? '' : styles.collapsed}`}>
         <div className={styles.sidebarHeader}>
-          <div className={styles.logo}>Z</div>
           {isSidebarOpen && <span className="brand-font">Panel</span>}
         </div>
 
