@@ -27,7 +27,7 @@ enum OrderStatus {
 
 model Product {
   id          String           @id @default(uuid())
-  name        String
+  name        String           @unique
   slug        String           @unique
   description String?
   type        ProductType      @default(PHYSICAL)
